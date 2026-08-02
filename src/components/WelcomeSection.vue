@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import welcomeHeroImage from '@/assets/images/welcome-hero.svg'
+import { EVENT_DATE, EVENT_INSTAGRAM_HANDLE, EVENT_INSTAGRAM_URL } from '@/constants/event'
 </script>
 
 <template>
@@ -11,11 +12,28 @@ import welcomeHeroImage from '@/assets/images/welcome-hero.svg'
     />
     <h1 class="display-5 fw-bold">Bem-vindo(a) ao Wedance!</h1>
     <p class="lead">Estamos muito felizes em ter você com a gente hoje.</p>
+    <p class="fw-semibold mb-1">{{ EVENT_DATE }}</p>
+    <a
+      :href="EVENT_INSTAGRAM_URL"
+      target="_blank"
+      rel="noopener"
+      class="welcome-section__instagram-link"
+    >
+      @{{ EVENT_INSTAGRAM_HANDLE }}
+    </a>
   </section>
 </template>
 
 <style scoped>
 .welcome-section__image {
   max-width: 420px;
+}
+
+.welcome-section__instagram-link {
+  font-weight: bold;
+}
+
+.welcome-section__instagram-link:hover {
+  font-weight: 900;
 }
 </style>
