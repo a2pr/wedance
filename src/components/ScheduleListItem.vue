@@ -6,7 +6,7 @@ defineProps<{ item: ScheduleItem }>()
 </script>
 
 <template>
-  <li class="list-group-item d-flex justify-content-between gap-2">
+  <li class="list-group-item d-flex justify-content-between gap-2 schedule-list-item">
     <span class="fw-semibold">{{ item.time }}</span>
     <span class="text-end">
       <template v-if="item.instructor">
@@ -34,6 +34,10 @@ defineProps<{ item: ScheduleItem }>()
 </template>
 
 <style scoped>
+.schedule-list-item {
+  font-size: clamp(0.45rem, 2.6cqw, 1.125rem);
+}
+
 .schedule-list-item__instagram-link {
   color: inherit;
 }

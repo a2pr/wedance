@@ -12,7 +12,7 @@ import { EVENT_DATE, EVENT_INSTAGRAM_HANDLE, EVENT_INSTAGRAM_URL } from '@/const
     />
     <h1 class="display-5 fw-bold">Bem-vindo(a) ao Wedance!</h1>
     <p class="lead">Estamos muito felizes em ter você com a gente hoje.</p>
-    <p class="fw-semibold mb-1">{{ EVENT_DATE }}</p>
+    <p class="fw-semibold mb-1 welcome-section__date">{{ EVENT_DATE }}</p>
     <a
       :href="EVENT_INSTAGRAM_URL"
       target="_blank"
@@ -27,6 +27,10 @@ import { EVENT_DATE, EVENT_INSTAGRAM_HANDLE, EVENT_INSTAGRAM_URL } from '@/const
 <style scoped>
 .welcome-section__image {
   max-width: 420px;
+}
+
+.welcome-section__date {
+  font-size: clamp(1.25rem, 0.75rem + 2vw, 1.75rem);
 }
 
 .welcome-section__instagram-link {

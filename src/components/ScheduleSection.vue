@@ -36,3 +36,9 @@ const lastPeriod = computed(() => SCHEDULE_PERIODS.at(-1))
     </div>
   </section>
 </template>
+
+<style scoped>
+.card {
+  container-type: inline-size;
+}
+</style>
