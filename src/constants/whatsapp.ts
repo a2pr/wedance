@@ -1,4 +1,4 @@
-export const WHATSAPP_PHONE_NUMBER = '5592984240045'
+export const WHATSAPP_PHONE_NUMBER = import.meta.env.VITE_WHATSAPP_PHONE_NUMBER
 export const WHATSAPP_MESSAGE_PREFIX = 'Ja paguei minha inscripçao'
 
 export function buildPaymentMessage(suffix: string): string {
