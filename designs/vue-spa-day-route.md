@@ -51,3 +51,11 @@ A follow-up pass replaced placeholder content and layout with real brand/content
 - **Real registration options** — `src/constants/formOptions.ts` restructured into 6 options from `designs/references/options.text` (the "Período (Manhã ou Tarde)" line split into two separate options per the user's instruction), each with its own price, a distinct placeholder SVG, and a `whatsappSuffix`.
 - **Per-option WhatsApp message** — `src/constants/whatsapp.ts` changed from one fixed message to `WHATSAPP_MESSAGE_PREFIX` + `buildPaymentMessage(suffix)`, so each option's "Já paguei!" click sends a tailored message, e.g. Fullpass → "Ja paguei minha inscripçao do pacote full pass!".
 - **Routing** — `src/router/index.ts` gained a catch-all (`{ path: '/:pathMatch(.*)*', redirect: '/day' }`), so every path (including `/`) now redirects to `/day` instead of rendering blank.
+
+## Refinement pass: schedule layout + PIX-based registration flow
+
+A further pass changed the schedule layout and swapped the registration flow's per-option images for a shared PIX QR code:
+
+- **Schedule** — `ScheduleSection.vue` now renders Manhã/Tarde as two side-by-side cards and Noite alone on a full-width row below (`mainPeriods`/`lastPeriod` computed from `SCHEDULE_PERIODS`, not hardcoded to the period name).
+- **PIX flow** — `formOptions.ts` no longer carries a per-option `image`; all 6 options now share one placeholder QR image (`src/assets/images/pix-qr.svg`). Selecting an option reveals (all gated behind selection, nothing shows beforehand): explanatory PIX instructions naming that option's price (`buildPixInstructions()` in `src/constants/pix.ts`), the shared QR image, the price again below it, a **"Pix copia Cola!"** button that copies a PIX code to the clipboard (`copyPixCodeToClipboard()`, Clipboard API with an `execCommand('copy')` fallback for mobile/older browsers), and the existing **"Já paguei!"** WhatsApp button (unchanged).
+- **PIX code as env var** — the copied value comes from `VITE_PIX_COPY_PASTE_CODE` (`.env`, currently the placeholder `12345`), typed via `env.d.ts`, not hardcoded in the component — swap `.env` when the real PIX copia-e-cola code is available.

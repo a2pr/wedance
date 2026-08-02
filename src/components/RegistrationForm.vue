@@ -1,13 +1,28 @@
 <script setup lang="ts">
 import { computed, ref } from 'vue'
+import pixQrImage from '@/assets/images/pix-qr.svg'
 import { FORM_OPTIONS } from '@/constants/formOptions'
 import { WHATSAPP_PHONE_NUMBER, buildPaymentMessage, buildWhatsAppLink } from '@/constants/whatsapp'
+import { buildPixInstructions, copyPixCodeToClipboard } from '@/constants/pix'
+
+const COPY_BUTTON_DEFAULT_LABEL = 'Pix copia Cola!'
+const COPY_BUTTON_COPIED_LABEL = 'Copiado!'
+const COPY_BUTTON_RESET_DELAY_MS = 1500
 
 const selectedOptionId = ref<string>('')
+const copyButtonLabel = ref(COPY_BUTTON_DEFAULT_LABEL)
 
 const selectedOption = computed(() =>
   FORM_OPTIONS.find((option) => option.id === selectedOptionId.value),
 )
+
+async function onCopyPixCode(): Promise<void> {
+  await copyPixCodeToClipboard()
+  copyButtonLabel.value = COPY_BUTTON_COPIED_LABEL
+  setTimeout(() => {
+    copyButtonLabel.value = COPY_BUTTON_DEFAULT_LABEL
+  }, COPY_BUTTON_RESET_DELAY_MS)
+}
 
 function sendPaymentConfirmation(): void {
   if (!selectedOption.value) return
@@ -42,13 +57,20 @@ function sendPaymentConfirmation(): void {
       </div>
 
       <div v-if="selectedOption" class="text-center mt-4">
+        <p class="mx-auto registration-form__instructions">
+          {{ buildPixInstructions(selectedOption.price) }}
+        </p>
         <img
-          class="img-fluid rounded mb-3 registration-form__image"
-          :src="selectedOption.image"
-          :alt="selectedOption.label"
+          class="img-fluid rounded mb-2 registration-form__image"
+          :src="pixQrImage"
+          alt="QR Code Pix"
         />
-        <div>
-          <button type="button" class="btn btn-success btn-lg" @click="sendPaymentConfirmation">
+        <p class="fw-bold fs-5">{{ selectedOption.price }}</p>
+        <div class="d-flex gap-2 justify-content-center flex-wrap mt-3">
+          <button type="button" class="btn btn-outline-success" @click="onCopyPixCode">
+            {{ copyButtonLabel }}
+          </button>
+          <button type="button" class="btn btn-success" @click="sendPaymentConfirmation">
             Já paguei!
           </button>
         </div>
@@ -59,6 +81,10 @@ function sendPaymentConfirmation(): void {
 
 <style scoped>
 .registration-form__image {
-  max-width: 320px;
+  max-width: 260px;
+}
+
+.registration-form__instructions {
+  max-width: 480px;
 }
 </style>
