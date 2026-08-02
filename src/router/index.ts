@@ -8,6 +8,10 @@ const router = createRouter({
       name: 'day',
       component: () => import('../views/DayView.vue'),
     },
+    {
+      path: '/:pathMatch(.*)*',
+      redirect: '/day',
+    },
   ],
 })
 

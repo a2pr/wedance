@@ -12,7 +12,7 @@ Built the first Wedance-specific page on top of the Vue 3 + Vite + TypeScript sc
 { path: '/day', name: 'day', component: () => import('../views/DayView.vue') }
 ```
 
-The scaffold's `/` and `/about` routes (and their views `HomeView.vue`/`AboutView.vue`) were removed, along with the unused scaffold components (`HelloWorld`, `TheWelcome`, `WelcomeItem`, `icons/*`). No catch-all/redirect route was added — per the request, everything besides `/day` stays inactive for now.
+The scaffold's `/` and `/about` routes (and their views `HomeView.vue`/`AboutView.vue`) were removed, along with the unused scaffold components (`HelloWorld`, `TheWelcome`, `WelcomeItem`, `icons/*`). Initially no catch-all/redirect route was added; a catch-all redirect to `/day` was added in a later pass — see [Refinement pass](#refinement-pass-branding-real-content-bootstrap-full-redirect) below.
 
 ## Page composition
 
@@ -36,6 +36,18 @@ Per project convention (>3 related hardcoded values get their own file), three c
 - `schedule.ts` — typed schedule entries (`{ time, activity }`).
 - `formOptions.ts` — typed registration options (`{ id, label, image }`).
 
-## Placeholder content
+## Placeholder content (superseded)
 
-No real images or final schedule/registration-option content were provided yet. Placeholder SVGs were added under `src/assets/images/` (a hero image and three option images) and placeholder schedule/option text was used. These are intended to be swapped for real content in a follow-up once it's available — the constants files are the single place to update.
+No real images or final schedule/registration-option content were provided yet. Placeholder SVGs were added under `src/assets/images/` (a hero image and three option images) and placeholder schedule/option text was used. See the refinement pass below for the real content that replaced this.
+
+## Refinement pass: branding, real content, Bootstrap, full redirect
+
+A follow-up pass replaced placeholder content and layout with real brand/content assets dropped into `designs/references/`:
+
+- **Palette** — `designs/references/8805130a-199f-4b54-93a6-66993cfa872d.jpeg` (the We Dance Company logo/poster) supplied a black + lime-green palette, approximated as `--color-brand-black: #0a0a0a` / `--color-brand-green: #8fc93e` (plus soft/dark variants) in `src/assets/base.css`. Only the palette was reused — the poster itself is a separate "Audições em breve" promo graphic with unrelated wording, not embedded on the page.
+- **Responsiveness** — switched from hand-rolled CSS breakpoints to [Bootstrap 5.3](https://getbootstrap.com/docs/5.3/getting-started/introduction/) (CSS only, no JS bundle needed). `index.html` sets `data-bs-theme="dark"`; `src/assets/base.css` overrides Bootstrap's CSS custom properties (`--bs-primary`, `--bs-body-bg`, `--bs-border-color`, etc.) with the brand palette so every Bootstrap primitive (`.card`, `.btn`, `.form-check`, the grid) stays on-brand without per-component overrides.
+- **Full-viewport sections** — each section root uses Bootstrap's `vh-100`/`min-vh-100` + flex utility classes to fill the screen; `DayView.vue` adds `scroll-snap-type: y mandatory` (not a Bootstrap feature) for a full-screen-per-section scroll feel.
+- **Real schedule** — `src/constants/schedule.ts` restructured into `SCHEDULE_PERIODS` (Manhã/Tarde/Noite groups) from `designs/references/schedule.text`, rendered as one Bootstrap card per period in `ScheduleSection.vue`.
+- **Real registration options** — `src/constants/formOptions.ts` restructured into 6 options from `designs/references/options.text` (the "Período (Manhã ou Tarde)" line split into two separate options per the user's instruction), each with its own price, a distinct placeholder SVG, and a `whatsappSuffix`.
+- **Per-option WhatsApp message** — `src/constants/whatsapp.ts` changed from one fixed message to `WHATSAPP_MESSAGE_PREFIX` + `buildPaymentMessage(suffix)`, so each option's "Já paguei!" click sends a tailored message, e.g. Fullpass → "Ja paguei minha inscripçao do pacote full pass!".
+- **Routing** — `src/router/index.ts` gained a catch-all (`{ path: '/:pathMatch(.*)*', redirect: '/day' }`), so every path (including `/`) now redirects to `/day` instead of rendering blank.

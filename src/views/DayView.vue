@@ -6,15 +6,20 @@ import RegistrationForm from '@/components/RegistrationForm.vue'
 
 <template>
   <main class="day-view">
-    <WelcomeSection />
-    <ScheduleSection />
-    <RegistrationForm />
+    <div class="day-view__section"><WelcomeSection /></div>
+    <div class="day-view__section"><ScheduleSection /></div>
+    <div class="day-view__section"><RegistrationForm /></div>
   </main>
 </template>
 
 <style scoped>
 .day-view {
-  display: flex;
-  flex-direction: column;
+  height: 100vh;
+  overflow-y: auto;
+  scroll-snap-type: y mandatory;
+}
+
+.day-view__section {
+  scroll-snap-align: start;
 }
 </style>

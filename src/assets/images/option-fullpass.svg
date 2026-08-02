@@ -1,0 +1,6 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="600" height="400" viewBox="0 0 600 400">
+  <rect width="600" height="400" fill="#0a0a0a"/>
+  <rect x="150" y="90" width="300" height="300" rx="20" fill="none" stroke="#8fc93e" stroke-width="6"/>
+  <path d="M300 130 L322 185 L382 185 L334 220 L352 278 L300 242 L248 278 L266 220 L218 185 L278 185 Z" fill="#8fc93e"/>
+  <text x="300" y="335" font-family="Verdana, sans-serif" font-size="30" fill="#ffffff" text-anchor="middle">Fullpass</text>
+</svg>

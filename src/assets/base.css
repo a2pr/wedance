@@ -1,53 +1,30 @@
-/* color palette from <https://github.com/vuejs/theme> */
+/* brand palette approximated from designs/references/8805130a-199f-4b54-93a6-66993cfa872d.jpeg */
 :root {
-  --vt-c-white: #ffffff;
-  --vt-c-white-soft: #f8f8f8;
-  --vt-c-white-mute: #f2f2f2;
+  --color-brand-black: #0a0a0a;
+  --color-brand-black-soft: #161616;
+  --color-brand-black-mute: #202020;
 
-  --vt-c-black: #181818;
-  --vt-c-black-soft: #222222;
-  --vt-c-black-mute: #282828;
-
-  --vt-c-indigo: #2c3e50;
-
-  --vt-c-divider-light-1: rgba(60, 60, 60, 0.29);
-  --vt-c-divider-light-2: rgba(60, 60, 60, 0.12);
-  --vt-c-divider-dark-1: rgba(84, 84, 84, 0.65);
-  --vt-c-divider-dark-2: rgba(84, 84, 84, 0.48);
-
-  --vt-c-text-light-1: var(--vt-c-indigo);
-  --vt-c-text-light-2: rgba(60, 60, 60, 0.66);
-  --vt-c-text-dark-1: var(--vt-c-white);
-  --vt-c-text-dark-2: rgba(235, 235, 235, 0.64);
+  --color-brand-green: #8fc93e;
+  --color-brand-green-rgb: 143, 201, 62;
+  --color-brand-green-dark: #5b8c29;
+  --color-brand-green-soft: rgba(143, 201, 62, 0.15);
 }
 
-/* semantic color variables for this project */
-:root {
-  --color-background: var(--vt-c-white);
-  --color-background-soft: var(--vt-c-white-soft);
-  --color-background-mute: var(--vt-c-white-mute);
-
-  --color-border: var(--vt-c-divider-light-2);
-  --color-border-hover: var(--vt-c-divider-light-1);
-
-  --color-heading: var(--vt-c-text-light-1);
-  --color-text: var(--vt-c-text-light-1);
-
-  --section-gap: 160px;
-}
-
-@media (prefers-color-scheme: dark) {
-  :root {
-    --color-background: var(--vt-c-black);
-    --color-background-soft: var(--vt-c-black-soft);
-    --color-background-mute: var(--vt-c-black-mute);
-
-    --color-border: var(--vt-c-divider-dark-2);
-    --color-border-hover: var(--vt-c-divider-dark-1);
-
-    --color-heading: var(--vt-c-text-dark-1);
-    --color-text: var(--vt-c-text-dark-2);
-  }
+[data-bs-theme='dark'] {
+  --bs-body-bg: var(--color-brand-black);
+  --bs-body-color: #f2f2f2;
+  --bs-secondary-bg: var(--color-brand-black-soft);
+  --bs-tertiary-bg: var(--color-brand-black-mute);
+  --bs-border-color: var(--color-brand-green-dark);
+  --bs-border-color-translucent: var(--color-brand-green-soft);
+  --bs-link-color: var(--color-brand-green);
+  --bs-link-hover-color: #a7dd63;
+  --bs-primary: var(--color-brand-green);
+  --bs-primary-rgb: var(--color-brand-green-rgb);
+  --bs-success: var(--color-brand-green);
+  --bs-success-rgb: var(--color-brand-green-rgb);
+  --bs-heading-color: #ffffff;
+  --bs-emphasis-color: #ffffff;
 }
 
 *,
@@ -60,11 +37,6 @@
 
 body {
   min-height: 100vh;
-  color: var(--color-text);
-  background: var(--color-background);
-  transition:
-    color 0.5s,
-    background-color 0.5s;
   line-height: 1.6;
   font-family:
     Inter,

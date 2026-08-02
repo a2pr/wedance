@@ -1,51 +1,28 @@
 <script setup lang="ts">
-import { SCHEDULE_ENTRIES } from '@/constants/schedule'
+import { SCHEDULE_PERIODS } from '@/constants/schedule'
 </script>
 
 <template>
-  <section class="schedule-section">
-    <h2 class="schedule-section__title">Programação do dia</h2>
-    <ul class="schedule-section__list">
-      <li v-for="entry in SCHEDULE_ENTRIES" :key="entry.time" class="schedule-section__item">
-        <span class="schedule-section__time">{{ entry.time }}</span>
-        <span class="schedule-section__activity">{{ entry.activity }}</span>
-      </li>
-    </ul>
+  <section class="min-vh-100 d-flex flex-column justify-content-center py-5 px-3">
+    <div class="container">
+      <h2 class="text-center mb-4">Programação do dia</h2>
+      <div class="row g-4">
+        <div v-for="period in SCHEDULE_PERIODS" :key="period.period" class="col-12 col-md-4">
+          <div class="card h-100">
+            <div class="card-header text-center fw-semibold">{{ period.period }}</div>
+            <ul class="list-group list-group-flush">
+              <li
+                v-for="item in period.items"
+                :key="item.time"
+                class="list-group-item d-flex justify-content-between gap-2"
+              >
+                <span class="fw-semibold">{{ item.time }}</span>
+                <span class="text-end">{{ item.description }}</span>
+              </li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </div>
   </section>
 </template>
-
-<style scoped>
-.schedule-section {
-  padding: 2rem 1rem;
-  max-width: 500px;
-  margin: 0 auto;
-}
-
-.schedule-section__title {
-  font-size: 1.5rem;
-  text-align: center;
-  margin-bottom: 1.5rem;
-}
-
-.schedule-section__list {
-  list-style: none;
-  margin: 0;
-  padding: 0;
-  display: flex;
-  flex-direction: column;
-  gap: 0.75rem;
-}
-
-.schedule-section__item {
-  display: flex;
-  align-items: baseline;
-  gap: 1rem;
-  border-bottom: 1px solid var(--color-border);
-  padding-bottom: 0.75rem;
-}
-
-.schedule-section__time {
-  font-weight: bold;
-  min-width: 4rem;
-}
-</style>

@@ -16,6 +16,7 @@
     "format": "prettier --write --experimental-cli src/"
   },
   "dependencies": {
+    "bootstrap": "^5.3.8",
     "vue": "rc",
     "vue-router": "^5.2.0"
   },

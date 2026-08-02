@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { computed, ref } from 'vue'
 import { FORM_OPTIONS } from '@/constants/formOptions'
-import { WHATSAPP_PHONE_NUMBER, WHATSAPP_PAYMENT_MESSAGE, buildWhatsAppLink } from '@/constants/whatsapp'
+import { WHATSAPP_PHONE_NUMBER, buildPaymentMessage, buildWhatsAppLink } from '@/constants/whatsapp'
 
 const selectedOptionId = ref<string>('')
 
@@ -10,99 +10,55 @@ const selectedOption = computed(() =>
 )
 
 function sendPaymentConfirmation(): void {
-  const link = buildWhatsAppLink(WHATSAPP_PHONE_NUMBER, WHATSAPP_PAYMENT_MESSAGE)
+  if (!selectedOption.value) return
+  const message = buildPaymentMessage(selectedOption.value.whatsappSuffix)
+  const link = buildWhatsAppLink(WHATSAPP_PHONE_NUMBER, message)
   window.open(link, '_blank', 'noopener')
 }
 </script>
 
 <template>
-  <section class="registration-form">
-    <h2 class="registration-form__title">Inscrição</h2>
+  <section class="min-vh-100 d-flex flex-column justify-content-center py-5 px-3">
+    <div class="container">
+      <h2 class="text-center mb-4">Inscrição</h2>
 
-    <div class="registration-form__options">
-      <label
-        v-for="option in FORM_OPTIONS"
-        :key="option.id"
-        class="registration-form__option"
-      >
-        <input
-          type="radio"
-          name="registration-option"
-          :value="option.id"
-          v-model="selectedOptionId"
+      <div class="row row-cols-2 row-cols-md-3 row-cols-lg-6 g-3 justify-content-center">
+        <div v-for="option in FORM_OPTIONS" :key="option.id" class="col">
+          <label
+            class="card h-100 text-center p-3"
+            :class="{ 'border-success border-2': selectedOptionId === option.id }"
+          >
+            <input
+              class="form-check-input mb-2"
+              type="radio"
+              name="registration-option"
+              :value="option.id"
+              v-model="selectedOptionId"
+            />
+            <span class="fw-semibold small">{{ option.label }}</span>
+            <span class="text-success small">{{ option.price }}</span>
+          </label>
+        </div>
+      </div>
+
+      <div v-if="selectedOption" class="text-center mt-4">
+        <img
+          class="img-fluid rounded mb-3 registration-form__image"
+          :src="selectedOption.image"
+          :alt="selectedOption.label"
         />
-        {{ option.label }}
-      </label>
-    </div>
-
-    <div v-if="selectedOption" class="registration-form__result">
-      <img
-        class="registration-form__image"
-        :src="selectedOption.image"
-        :alt="selectedOption.label"
-      />
-      <button type="button" class="registration-form__pay-button" @click="sendPaymentConfirmation">
-        Já paguei!
-      </button>
+        <div>
+          <button type="button" class="btn btn-success btn-lg" @click="sendPaymentConfirmation">
+            Já paguei!
+          </button>
+        </div>
+      </div>
     </div>
   </section>
 </template>
 
 <style scoped>
-.registration-form {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 1.5rem;
-  padding: 2rem 1rem;
-  text-align: center;
-}
-
-.registration-form__title {
-  font-size: 1.5rem;
-  margin: 0;
-}
-
-.registration-form__options {
-  display: flex;
-  flex-wrap: wrap;
-  justify-content: center;
-  gap: 1rem;
-}
-
-.registration-form__option {
-  display: flex;
-  align-items: center;
-  gap: 0.5rem;
-  cursor: pointer;
-}
-
-.registration-form__result {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 1rem;
-}
-
 .registration-form__image {
-  width: 100%;
   max-width: 320px;
-  height: auto;
-  border-radius: 0.5rem;
-}
-
-.registration-form__pay-button {
-  background-color: #25d366;
-  color: #ffffff;
-  border: none;
-  border-radius: 0.5rem;
-  padding: 0.75rem 1.5rem;
-  font-size: 1rem;
-  font-weight: bold;
-  cursor: pointer;
-}
-
-.registration-form__pay-button:hover {
-  opacity: 0.9;
 }
 </style>
