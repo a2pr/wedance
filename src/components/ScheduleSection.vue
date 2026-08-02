@@ -30,7 +30,7 @@ const lastPeriod = computed(() => SCHEDULE_PERIODS.at(-1))
           <div class="card h-100">
             <div class="card-header text-center fw-semibold">{{ period.period }}</div>
             <ul class="list-group list-group-flush">
-              <ScheduleListItem v-for="item in period.items" :key="item.time" :item="item" />
+              <ScheduleListItem v-for="item in period.items" :key="item.id" :item="item" />
             </ul>
           </div>
         </div>
@@ -41,7 +41,7 @@ const lastPeriod = computed(() => SCHEDULE_PERIODS.at(-1))
           <div class="card">
             <div class="card-header text-center fw-semibold">{{ lastPeriod.period }}</div>
             <ul class="list-group list-group-flush">
-              <ScheduleListItem v-for="item in lastPeriod.items" :key="item.time" :item="item" />
+              <ScheduleListItem v-for="item in lastPeriod.items" :key="item.id" :item="item" />
             </ul>
           </div>
         </div>

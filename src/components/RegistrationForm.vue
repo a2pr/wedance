@@ -1,20 +1,87 @@
 <script setup lang="ts">
-import { computed, ref } from 'vue'
+import { computed, ref, watch } from 'vue'
 import pixQrImage from '@/assets/images/pix-qr.svg'
-import { FORM_OPTIONS } from '@/constants/formOptions'
+import { FORM_OPTIONS, formatPriceBRL } from '@/constants/formOptions'
 import { WHATSAPP_PHONE_NUMBER, buildPaymentMessage, buildWhatsAppLink } from '@/constants/whatsapp'
 import { buildPixInstructions, copyPixCodeToClipboard } from '@/constants/pix'
+import {
+  AULA_AVULSA_UPGRADE_MESSAGES,
+  buildAulaAvulsaSelectionLabel,
+  buildAulaAvulsaWhatsappSuffix,
+  evaluateAulaAvulsaSelection,
+  getClassNamesByIds,
+  type AulaAvulsaUpgradeOptionId,
+} from '@/constants/aulaAvulsaSelection'
+import AulaAvulsaClassPicker from '@/components/AulaAvulsaClassPicker.vue'
+import ConfirmModal from '@/components/ConfirmModal.vue'
 
 const COPY_BUTTON_DEFAULT_LABEL = 'Pix copia Cola!'
 const COPY_BUTTON_COPIED_LABEL = 'Copiado!'
 const COPY_BUTTON_RESET_DELAY_MS = 1500
+const AULA_AVULSA_OPTION_ID = 'aula-avulsa'
 
 const selectedOptionId = ref<string>('')
 const copyButtonLabel = ref(COPY_BUTTON_DEFAULT_LABEL)
 
+const selectedClassIds = ref<string[]>([])
+const isAulaAvulsaSubmitted = ref(false)
+const showUpgradeModal = ref(false)
+const pendingUpgradeOptionId = ref<AulaAvulsaUpgradeOptionId | null>(null)
+
 const selectedOption = computed(() =>
   FORM_OPTIONS.find((option) => option.id === selectedOptionId.value),
 )
+
+const isAulaAvulsaMode = computed(() => selectedOptionId.value === AULA_AVULSA_OPTION_ID)
+const aulaAvulsaEvaluation = computed(() => evaluateAulaAvulsaSelection(selectedClassIds.value))
+const aulaAvulsaPriceDisplay = computed(() => formatPriceBRL(aulaAvulsaEvaluation.value.totalPriceValue))
+const aulaAvulsaLabel = computed(() => buildAulaAvulsaSelectionLabel(selectedClassIds.value.length))
+const upgradeModalMessage = computed(() =>
+  pendingUpgradeOptionId.value ? AULA_AVULSA_UPGRADE_MESSAGES[pendingUpgradeOptionId.value] : '',
+)
+
+const pixContext = computed(() => {
+  if (isAulaAvulsaMode.value) {
+    if (!isAulaAvulsaSubmitted.value) return null
+    return {
+      priceDisplay: aulaAvulsaPriceDisplay.value,
+      whatsappSuffix: buildAulaAvulsaWhatsappSuffix(getClassNamesByIds(selectedClassIds.value)),
+    }
+  }
+  if (!selectedOption.value) return null
+  return { priceDisplay: selectedOption.value.price, whatsappSuffix: selectedOption.value.whatsappSuffix }
+})
+
+watch(selectedOptionId, (newId, oldId) => {
+  if (oldId === AULA_AVULSA_OPTION_ID && newId !== AULA_AVULSA_OPTION_ID) {
+    selectedClassIds.value = []
+    isAulaAvulsaSubmitted.value = false
+    showUpgradeModal.value = false
+    pendingUpgradeOptionId.value = null
+  }
+})
+
+function onConfirmAulaAvulsaSelection(): void {
+  const { upgradeOptionId } = aulaAvulsaEvaluation.value
+  if (upgradeOptionId) {
+    pendingUpgradeOptionId.value = upgradeOptionId
+    showUpgradeModal.value = true
+    return
+  }
+  isAulaAvulsaSubmitted.value = true
+}
+
+function onConfirmUpgrade(): void {
+  if (!pendingUpgradeOptionId.value) return
+  selectedOptionId.value = pendingUpgradeOptionId.value
+  showUpgradeModal.value = false
+  pendingUpgradeOptionId.value = null
+}
+
+function onCancelUpgrade(): void {
+  showUpgradeModal.value = false
+  pendingUpgradeOptionId.value = null
+}
 
 async function onCopyPixCode(): Promise<void> {
   await copyPixCodeToClipboard()
@@ -25,8 +92,8 @@ async function onCopyPixCode(): Promise<void> {
 }
 
 function sendPaymentConfirmation(): void {
-  if (!selectedOption.value) return
-  const message = buildPaymentMessage(selectedOption.value.whatsappSuffix)
+  if (!pixContext.value) return
+  const message = buildPaymentMessage(pixContext.value.whatsappSuffix)
   const link = buildWhatsAppLink(WHATSAPP_PHONE_NUMBER, message)
   window.open(link, '_blank', 'noopener')
 }
@@ -56,16 +123,43 @@ function sendPaymentConfirmation(): void {
         </div>
       </div>
 
-      <div v-if="selectedOption" class="text-center mt-4">
+      <div v-if="isAulaAvulsaMode && !isAulaAvulsaSubmitted" class="mt-4">
+        <p class="text-center fw-semibold mb-3">Escolha as aulas que deseja fazer</p>
+        <AulaAvulsaClassPicker v-model="selectedClassIds" />
+        <div class="text-center mt-3">
+          <p class="fw-bold fs-5 mb-3">{{ aulaAvulsaLabel }} — {{ aulaAvulsaPriceDisplay }}</p>
+          <button
+            type="button"
+            class="btn btn-success"
+            :disabled="selectedClassIds.length === 0"
+            @click="onConfirmAulaAvulsaSelection"
+          >
+            Confirmar seleção
+          </button>
+        </div>
+      </div>
+
+      <div v-if="isAulaAvulsaMode && isAulaAvulsaSubmitted" class="text-center mt-4">
+        <p class="fw-semibold mb-2">{{ aulaAvulsaLabel }}</p>
+        <button
+          type="button"
+          class="btn btn-outline-secondary btn-sm"
+          @click="isAulaAvulsaSubmitted = false"
+        >
+          Alterar seleção
+        </button>
+      </div>
+
+      <div v-if="pixContext" class="text-center mt-4">
         <p class="mx-auto registration-form__instructions">
-          {{ buildPixInstructions(selectedOption.price) }}
+          {{ buildPixInstructions(pixContext.priceDisplay) }}
         </p>
         <img
           class="img-fluid rounded mb-2 registration-form__image"
           :src="pixQrImage"
           alt="QR Code Pix"
         />
-        <p class="fw-bold fs-5">{{ selectedOption.price }}</p>
+        <p class="fw-bold fs-5">{{ pixContext.priceDisplay }}</p>
         <div class="d-flex gap-2 justify-content-center flex-wrap mt-3">
           <button type="button" class="btn btn-outline-success" @click="onCopyPixCode">
             {{ copyButtonLabel }}
@@ -76,6 +170,16 @@ function sendPaymentConfirmation(): void {
         </div>
       </div>
     </div>
+
+    <ConfirmModal
+      :show="showUpgradeModal"
+      title="Atualizar inscrição"
+      :message="upgradeModalMessage"
+      confirm-label="Confirmar"
+      cancel-label="Cancelar"
+      @confirm="onConfirmUpgrade"
+      @cancel="onCancelUpgrade"
+    />
   </section>
 </template>
 
