@@ -65,7 +65,7 @@ export const SCHEDULE_PERIODS: SchedulePeriod[] = [
       },
       {
         time: '16:30',
-        activity: 'Salsa (Introdução à Roda de Casino)',
+        activity: 'Salsa (Dile que no)',
         instructor: { name: 'Jhon', instagramUrl: 'https://www.instagram.com/michell_jmpy/' },
       },
     ],

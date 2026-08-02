@@ -1,6 +1,0 @@
-<svg xmlns="http://www.w3.org/2000/svg" width="800" height="450" viewBox="0 0 800 450">
-  <rect width="800" height="450" fill="#0a0a0a"/>
-  <circle cx="400" cy="190" r="100" fill="none" stroke="#8fc93e" stroke-width="8"/>
-  <path d="M400 130 L424 178 L478 178 L436 210 L452 262 L400 230 L348 262 L364 210 L322 178 L376 178 Z" fill="#8fc93e"/>
-  <text x="400" y="360" font-family="Verdana, sans-serif" font-size="44" fill="#ffffff" text-anchor="middle">Wedance</text>
-</svg>
