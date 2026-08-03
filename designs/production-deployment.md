@@ -19,14 +19,14 @@ VITE_PIX_COPY_PASTE_CODE=12345
 VITE_WHATSAPP_PHONE_NUMBER=5592984240045
 ```
 
-Make sure your local `.env` has the real PIX "copia e cola" code and the real WhatsApp contact number (not placeholders), then build:
+Make sure your local `.env.prod` (not `.env` — that's for local dev) has the real PIX "copia e cola" code and the real WhatsApp contact number (not placeholders), then build:
 
 ```bash
 npm ci
-npm run build
+npm run build:prod
 ```
 
-`npm run build` runs a type-check (`vue-tsc`) alongside `vite build`. Vite's production build already minifies JS/CSS/HTML and content-hashes filenames — no extra minification step is needed. Output lands in `dist/`.
+`npm run build:prod` runs a type-check (`vue-tsc`) alongside `vite build --mode prod`, which loads `.env.prod` instead of the local-dev `.env`. Vite's production build already minifies JS/CSS/HTML and content-hashes filenames — no extra minification step is needed. Output lands in `dist/`.
 
 ## 2. Firebase project files
 
