@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { computed, ref, watch } from 'vue'
-import pixQrImage from '@/assets/images/pix-qr.svg'
+import pixQrImage from '@/assets/images/pix-qr.png'
 import { FORM_OPTIONS, formatPriceBRL } from '@/constants/formOptions'
 import { WHATSAPP_PHONE_NUMBER, buildPaymentMessage, buildWhatsAppLink } from '@/constants/whatsapp'
 import { buildPixInstructions, copyPixCodeToClipboard } from '@/constants/pix'
@@ -169,6 +169,13 @@ function sendPaymentConfirmation(): void {
           </button>
         </div>
       </div>
+
+      <p class="text-center text-muted small mt-5 mb-0">
+        Site desenvolvido por
+        <a href="https://andrespayema.com/" target="_blank" rel="noopener noreferrer" class="text-muted">
+          Andres Payema
+        </a>
+      </p>
     </div>
 
     <ConfirmModal
