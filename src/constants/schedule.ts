@@ -61,7 +61,7 @@ export const SCHEDULE_PERIODS: SchedulePeriod[] = [
         id: 'samba',
         time: '14:30',
         activity: 'Samba (Entendendo melhor os deslocamentos)',
-        instructor: { name: 'Daniel' },
+        instructor: { name: 'Daniel' , instagramUrl: 'https://www.instagram.com/bertondaniel/'},
       },
       {
         id: 'forro-tarde',
