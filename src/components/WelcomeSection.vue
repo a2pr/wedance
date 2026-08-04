@@ -1,20 +1,16 @@
 <script setup lang="ts">
-import welcomeFlyerImage from '@/assets/images/welcome-flyer.png'
-import welcomeFlyerMobileImage from '@/assets/images/welcome-flyer-mobile.png'
+import welcomeFlyerImage from '@/assets/images/welcome-flyer.jpeg'
 </script>
 
 <template>
   <section
     class="vh-100 welcome-section d-flex flex-column justify-content-center align-items-center text-center px-3"
   >
-    <picture>
-      <source media="(max-width: 767.98px)" :srcset="welcomeFlyerMobileImage" />
-      <img
-        class="img-fluid welcome-section__image"
-        :src="welcomeFlyerImage"
-        alt="Wedance — Dance Day, 23 de Agosto"
-      />
-    </picture>
+    <img
+      class="img-fluid welcome-section__image"
+      :src="welcomeFlyerImage"
+      alt="Wedance — Dance Day, 23 de Agosto"
+    />
   </section>
 </template>
 

@@ -1,6 +1,7 @@
 export interface Instructor {
   name: string
   instagramUrl?: string
+  instagramUrlTwo?: string
 }
 
 export interface ScheduleItem {
@@ -25,15 +26,16 @@ export const SCHEDULE_PERIODS: SchedulePeriod[] = [
         id: 'tecnicas-corporais',
         time: '09:30',
         activity: 'Técnicas Corporais',
-        instructor: { name: 'Erica Aoto', instagramUrl: 'https://www.instagram.com/ericaaoto/' },
+        instructor: {name: 'Erica Aoto', instagramUrl: 'https://www.instagram.com/ericaaoto/'},
       },
       {
         id: 'forro-manha',
         time: '10:30',
         activity: 'Forró e suas possibilidades',
         instructor: {
-          name: 'Pamela Ribeiro',
+          name: 'Pamela Ribeiro e Witheney Alexander',
           instagramUrl: 'https://www.instagram.com/pamrvribeiro/',
+          instagramUrlTwo: 'https://www.instagram.com/witheneyalexander/'
         },
       },
       {
@@ -45,7 +47,7 @@ export const SCHEDULE_PERIODS: SchedulePeriod[] = [
           instagramUrl: 'https://www.instagram.com/gregorio.negoseki/',
         },
       },
-      { id: 'intervalo', time: '12:30', activity: 'Intervalo', selectable: false },
+      {id: 'intervalo', time: '12:30', activity: 'Intervalo', selectable: false},
     ],
   },
   {
@@ -55,28 +57,31 @@ export const SCHEDULE_PERIODS: SchedulePeriod[] = [
         id: 'tango',
         time: '13:30',
         activity: 'Tango para todos',
-        instructor: { name: 'Samara', instagramUrl: 'https://www.instagram.com/samarasfair/' },
+        instructor: {name: 'Samara Sfair', instagramUrl: 'https://www.instagram.com/samarasfair/'},
       },
       {
         id: 'samba',
         time: '14:30',
-        activity: 'Samba (Entendendo melhor os deslocamentos)',
-        instructor: { name: 'Daniel' , instagramUrl: 'https://www.instagram.com/bertondaniel/'},
+        activity: 'Samba (Deslocamentos)',
+        instructor: {
+          name: 'Daniel Berton',
+          instagramUrl: 'https://www.instagram.com/bertondaniel/'
+        },
       },
       {
         id: 'forro-tarde',
         time: '15:30',
-        activity: 'Forró (O universo do amassa cacau)',
+        activity: 'Salsa en linea',
         instructor: {
-          name: 'Witheney',
-          instagramUrl: 'https://www.instagram.com/witheneyalexander/',
+          name: 'Giovanna Leoni',
+          instagramUrl: 'https://www.instagram.com/giovanna.leoni/',
         },
       },
       {
         id: 'salsa',
         time: '16:30',
-        activity: 'Salsa (Dile que no)',
-        instructor: { name: 'Jhon', instagramUrl: 'https://www.instagram.com/michell_jmpy/' },
+        activity: 'Roda de casino (Dile que no)',
+        instructor: {name: 'Jhon Michell', instagramUrl: 'https://www.instagram.com/michell_jmpy/'},
       },
     ],
   },

@@ -25,6 +25,16 @@ defineProps<{ item: ScheduleItem }>()
           <span v-else class="text-muted" aria-hidden="true">
             <InstagramIcon />
           </span>
+          <a
+            v-if="item.instructor.instagramUrlTwo"
+            :href="item.instructor.instagramUrlTwo"
+            target="_blank"
+            rel="noopener"
+            class="schedule-list-item__instagram-link"
+            :aria-label="`Instagram de ${item.instructor.name}`"
+          >
+            <InstagramIcon />
+          </a>
         </span>
         : {{ item.activity }}
       </template>
