@@ -14,6 +14,8 @@ import {
 } from '@/constants/aulaAvulsaSelection'
 import AulaAvulsaClassPicker from '@/components/AulaAvulsaClassPicker.vue'
 import ConfirmModal from '@/components/ConfirmModal.vue'
+import { ANALYTICS_EVENTS } from '@/constants/analyticsEvents'
+import { trackEvent } from '@/utils/analytics'
 
 const COPY_BUTTON_DEFAULT_LABEL = 'Pix copia Cola!'
 const COPY_BUTTON_COPIED_LABEL = 'Copiado!'
@@ -59,13 +61,35 @@ watch(selectedOptionId, (newId, oldId) => {
     showUpgradeModal.value = false
     pendingUpgradeOptionId.value = null
   }
+  if (newId) {
+    const option = FORM_OPTIONS.find((candidate) => candidate.id === newId)
+    trackEvent(ANALYTICS_EVENTS.SELECT_OPTION, { option_id: newId, option_label: option?.label })
+  }
+})
+
+watch(pixContext, (newContext, oldContext) => {
+  const hasChanged =
+    !oldContext ||
+    newContext?.priceDisplay !== oldContext.priceDisplay ||
+    newContext?.whatsappSuffix !== oldContext.whatsappSuffix
+  if (newContext && hasChanged) {
+    trackEvent(ANALYTICS_EVENTS.VIEW_PAYMENT_INSTRUCTIONS, {
+      option_id: selectedOptionId.value,
+      price: newContext.priceDisplay,
+    })
+  }
 })
 
 function onConfirmAulaAvulsaSelection(): void {
   const { upgradeOptionId } = aulaAvulsaEvaluation.value
+  trackEvent(ANALYTICS_EVENTS.CONFIRM_CLASS_SELECTION, {
+    class_count: selectedClassIds.value.length,
+    price: aulaAvulsaPriceDisplay.value,
+  })
   if (upgradeOptionId) {
     pendingUpgradeOptionId.value = upgradeOptionId
     showUpgradeModal.value = true
+    trackEvent(ANALYTICS_EVENTS.VIEW_UPGRADE_PROMPT, { suggested_option_id: upgradeOptionId })
     return
   }
   isAulaAvulsaSubmitted.value = true
@@ -73,18 +97,24 @@ function onConfirmAulaAvulsaSelection(): void {
 
 function onConfirmUpgrade(): void {
   if (!pendingUpgradeOptionId.value) return
+  trackEvent(ANALYTICS_EVENTS.CONFIRM_UPGRADE, { option_id: pendingUpgradeOptionId.value })
   selectedOptionId.value = pendingUpgradeOptionId.value
   showUpgradeModal.value = false
   pendingUpgradeOptionId.value = null
 }
 
 function onCancelUpgrade(): void {
+  trackEvent(ANALYTICS_EVENTS.CANCEL_UPGRADE)
   showUpgradeModal.value = false
   pendingUpgradeOptionId.value = null
 }
 
 async function onCopyPixCode(): Promise<void> {
   await copyPixCodeToClipboard()
+  trackEvent(ANALYTICS_EVENTS.COPY_PIX_CODE, {
+    option_id: selectedOptionId.value,
+    price: pixContext.value?.priceDisplay,
+  })
   copyButtonLabel.value = COPY_BUTTON_COPIED_LABEL
   setTimeout(() => {
     copyButtonLabel.value = COPY_BUTTON_DEFAULT_LABEL
@@ -93,6 +123,10 @@ async function onCopyPixCode(): Promise<void> {
 
 function sendPaymentConfirmation(): void {
   if (!pixContext.value) return
+  trackEvent(ANALYTICS_EVENTS.PAYMENT_CONFIRMED, {
+    option_id: selectedOptionId.value,
+    price: pixContext.value.priceDisplay,
+  })
   const message = buildPaymentMessage(pixContext.value.whatsappSuffix)
   const link = buildWhatsAppLink(WHATSAPP_PHONE_NUMBER, message)
   window.open(link, '_blank', 'noopener')

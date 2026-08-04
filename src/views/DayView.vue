@@ -3,6 +3,8 @@ import { onBeforeUnmount, onMounted, ref } from 'vue'
 import WelcomeSection from '@/components/WelcomeSection.vue'
 import ScheduleSection from '@/components/ScheduleSection.vue'
 import RegistrationForm from '@/components/RegistrationForm.vue'
+import { ANALYTICS_EVENTS } from '@/constants/analyticsEvents'
+import { trackEvent } from '@/utils/analytics'
 
 const SECTION_VISIBILITY_THRESHOLD = 0.5
 
@@ -17,6 +19,7 @@ const sectionEls = ref<HTMLElement[]>([])
 const activeSectionIndex = ref(0)
 
 let observer: IntersectionObserver | null = null
+const viewedSectionIds = new Set<string>()
 
 function setSectionRef(el: Element | null, index: number): void {
   if (el instanceof HTMLElement) {
@@ -34,7 +37,14 @@ onMounted(() => {
       for (const entry of entries) {
         if (entry.isIntersecting) {
           const index = sectionEls.value.indexOf(entry.target as HTMLElement)
-          if (index !== -1) activeSectionIndex.value = index
+          if (index !== -1) {
+            activeSectionIndex.value = index
+            const sectionId = sections[index]?.id
+            if (sectionId && !viewedSectionIds.has(sectionId)) {
+              viewedSectionIds.add(sectionId)
+              trackEvent(ANALYTICS_EVENTS.VIEW_SECTION, { section_id: sectionId })
+            }
+          }
         }
       }
     },

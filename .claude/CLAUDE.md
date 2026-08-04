@@ -24,3 +24,10 @@ Team standard is to avoid explanatory comments — a single line noting the cons
 
 ## Vue
 We are running a vue application
+
+## DO NOT TOUCH FILES
+- any env file
+- if need it just comment in terminal
+
+## FIREBASE
+Under any circumstance should we used deployment commands to firebase  from this project. Only Humans should be doing that
