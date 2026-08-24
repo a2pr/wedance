@@ -4,13 +4,13 @@ const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
   routes: [
     {
-      path: '/day',
-      name: 'day',
-      component: () => import('../views/DayView.vue'),
+      path: '/',
+      name: 'home',
+      component: () => import('../views/HomeView.vue'),
     },
     {
       path: '/:pathMatch(.*)*',
-      redirect: '/day',
+      redirect: '/',
     },
   ],
 })

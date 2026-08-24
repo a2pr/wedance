@@ -1,0 +1,3 @@
+todo
+- automated tests for whole flow with ai
+- more styling
