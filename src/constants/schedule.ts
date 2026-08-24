@@ -9,7 +9,7 @@ export interface ScheduleItem {
   time: string
   activity: string
   instructor?: Instructor
-  // absent means selectable; only Intervalo and Baile Latino opt out
+  // absent means selectable; only the break and closing event opt out
   selectable?: boolean
 }
 
@@ -23,65 +23,65 @@ export const SCHEDULE_PERIODS: SchedulePeriod[] = [
     period: 'Manhã',
     items: [
       {
-        id: 'tecnicas-corporais',
-        time: '09:30',
-        activity: 'Técnicas Corporais',
-        instructor: {name: 'Erica Aoto', instagramUrl: 'https://www.instagram.com/ericaaoto/'},
+        id: 'aula-1',
+        time: '[HH:MM]',
+        activity: '[Nome da Aula 1]',
+        instructor: {name: 'Instrutor 1', instagramUrl: 'https://www.instagram.com/seu_instagram/'},
       },
       {
-        id: 'forro-manha',
-        time: '10:30',
-        activity: 'Forró e suas possibilidades',
+        id: 'aula-2',
+        time: '[HH:MM]',
+        activity: '[Nome da Aula 2]',
         instructor: {
-          name: 'Pamela Ribeiro e Witheney Alexander',
-          instagramUrl: 'https://www.instagram.com/pamrvribeiro/',
-          instagramUrlTwo: 'https://www.instagram.com/witheneyalexander/'
+          name: 'Instrutor 2 e Instrutor 3',
+          instagramUrl: 'https://www.instagram.com/seu_instagram/',
+          instagramUrlTwo: 'https://www.instagram.com/seu_instagram/'
         },
       },
       {
-        id: 'sertanejo-intermediario',
-        time: '11:30',
-        activity: 'Sertanejo Intermediário',
+        id: 'aula-3',
+        time: '[HH:MM]',
+        activity: '[Nome da Aula 3]',
         instructor: {
-          name: 'Gregorio Negoseki',
-          instagramUrl: 'https://www.instagram.com/gregorio.negoseki/',
+          name: 'Instrutor 4',
+          instagramUrl: 'https://www.instagram.com/seu_instagram/',
         },
       },
-      {id: 'intervalo', time: '12:30', activity: 'Intervalo', selectable: false},
+      {id: 'intervalo', time: '[HH:MM]', activity: 'Intervalo', selectable: false},
     ],
   },
   {
     period: 'Tarde',
     items: [
       {
-        id: 'tango',
-        time: '13:30',
-        activity: 'Tango para todos',
-        instructor: {name: 'Samara Sfair', instagramUrl: 'https://www.instagram.com/samarasfair/'},
+        id: 'aula-4',
+        time: '[HH:MM]',
+        activity: '[Nome da Aula 4]',
+        instructor: {name: 'Instrutor 5', instagramUrl: 'https://www.instagram.com/seu_instagram/'},
       },
       {
-        id: 'samba',
-        time: '14:30',
-        activity: 'Samba (Deslocamentos)',
+        id: 'aula-5',
+        time: '[HH:MM]',
+        activity: '[Nome da Aula 5]',
         instructor: {
-          name: 'Daniel Berton',
-          instagramUrl: 'https://www.instagram.com/bertondaniel/'
+          name: 'Instrutor 6',
+          instagramUrl: 'https://www.instagram.com/seu_instagram/'
         },
       },
       {
-        id: 'forro-tarde',
-        time: '15:30',
-        activity: 'Salsa en linea',
+        id: 'aula-6',
+        time: '[HH:MM]',
+        activity: '[Nome da Aula 6]',
         instructor: {
-          name: 'Giovanna Leoni',
-          instagramUrl: 'https://www.instagram.com/giovanna.leoni/',
+          name: 'Instrutor 7',
+          instagramUrl: 'https://www.instagram.com/seu_instagram/',
         },
       },
       {
-        id: 'salsa',
-        time: '16:30',
-        activity: 'Roda de casino (Dile que no)',
-        instructor: {name: 'Jhon Michell', instagramUrl: 'https://www.instagram.com/michell_jmpy/'},
+        id: 'aula-7',
+        time: '[HH:MM]',
+        activity: '[Nome da Aula 7]',
+        instructor: {name: 'Instrutor 8', instagramUrl: 'https://www.instagram.com/seu_instagram/'},
       },
     ],
   },
@@ -89,12 +89,12 @@ export const SCHEDULE_PERIODS: SchedulePeriod[] = [
     period: 'Noite',
     items: [
       {
-        id: 'baile-latino',
-        time: '17:30 às 20:30',
-        activity: 'Baile Latino',
+        id: 'evento-final',
+        time: '[HH:MM] às [HH:MM]',
+        activity: '[Nome do Evento Final]',
         instructor: {
-          name: 'DJ Dropguima',
-          instagramUrl: 'https://www.instagram.com/dropguima/',
+          name: 'DJ Exemplo',
+          instagramUrl: 'https://www.instagram.com/seu_instagram/',
         },
         selectable: false,
       },

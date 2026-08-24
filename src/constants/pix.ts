@@ -1,7 +1,7 @@
 export const PIX_COPY_PASTE_CODE = import.meta.env.VITE_PIX_COPY_PASTE_CODE
 
 export function buildPixInstructions(price: string): string {
-  return `Para fazer a inscrição, você só precisa fazer um PIX no valor de ${price} para o nosso Diretor. Aqui está o QR Code e o código copia e cola para fazer o pix.`
+  return `Para fazer a inscrição, você só precisa fazer um PIX no valor de ${price} para o organizador do evento. Aqui está o QR Code e o código copia e cola para fazer o pix.`
 }
 
 export async function copyPixCodeToClipboard(): Promise<void> {

@@ -44,7 +44,7 @@ export function evaluateAulaAvulsaSelection(selectedClassIds: string[]): AulaAvu
 }
 
 export function buildAulaAvulsaSelectionLabel(count: number): string {
-  return `Aula Avulsa (${count} ${count === 1 ? 'aula' : 'aulas'})`
+  return `${findOption('aula-avulsa').label} (${count} ${count === 1 ? 'aula' : 'aulas'})`
 }
 
 const PICKABLE_CLASSES_BY_ID = new Map(
@@ -59,7 +59,8 @@ export function getClassNamesByIds(classIds: string[]): string[] {
 
 export function buildAulaAvulsaWhatsappSuffix(classNames: string[]): string {
   const count = classNames.length
-  return `de ${count} ${count === 1 ? 'aula avulsa' : 'aulas avulsas'} (${classNames.join(', ')})`
+  const label = findOption('aula-avulsa').label
+  return `de ${count} ${count === 1 ? 'aula' : 'aulas'} do ${label} (${classNames.join(', ')})`
 }
 
 function buildUpgradeMessage(prefix: string, optionId: AulaAvulsaUpgradeOptionId): string {
