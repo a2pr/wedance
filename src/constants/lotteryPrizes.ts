@@ -1,5 +1,9 @@
 import prizeAulaWitheneyImage from '@/assets/images/prize-aula-witheney.jpeg'
 import prizeAulaSamaraImage from '@/assets/images/prize-aula-samara.jpeg'
+import prizeTiaraImage from '@/assets/images/prize-tiara.jpeg'
+import prizeAulaChrysImage from '@/assets/images/chrys.jpeg'
+import prizeMilongaImage from '@/assets/images/milonga.jpeg'
+import prizeIngressosImage from '@/assets/images/ingressos.jpeg'
 
 export interface LotteryPrize {
   id: string
@@ -15,6 +19,7 @@ export const LOTTERY_PRIZES: LotteryPrize[] = [
     id: 'aula-particular-chrys',
     name: 'Aula particular com a prof. Chrys',
     description: 'Uma aula particular exclusiva',
+    image: prizeAulaChrysImage,
   },
   {
     id: 'aula-particular-witheney',
@@ -33,9 +38,9 @@ export const LOTTERY_PRIZES: LotteryPrize[] = [
     instagramName: 'Samara',
   },
   {
-    id: 'sapatilha-bailarina',
-    name: 'Sapatilha bailarina',
-    description: 'Um par de sapatilhas',
+    id: 'bailarina',
+    name: 'bailarina',
+    description: 'Uma bailarina',
   },
   {
     id: 'camisetas-personalizadas',
@@ -44,10 +49,12 @@ export const LOTTERY_PRIZES: LotteryPrize[] = [
   {
     id: 'ingressos-encontro-sertanejo',
     name: 'Par de ingressos para o Encontro Sertanejo',
+    image: prizeIngressosImage,
   },
   {
     id: 'tiara',
     name: 'Tiara',
+    image: prizeTiaraImage,
   },
   {
     id: 'bolsa-de-perolas',
@@ -68,11 +75,13 @@ export const LOTTERY_PRIZES: LotteryPrize[] = [
   },
   {
     id: 'ingressos-milonga-sentimental',
-    name: 'Par de ingressos para a milonga Sentimental',
+    name: 'Par de ingressos para a Milonga Sentimental',
+    image: prizeMilongaImage,
   },
   {
     id: 'ingressos-sabores-do-nordeste',
-    name: 'Par de ingressos para o Sabores do Nordeste',
+    name: 'Par de ingressos para o evento Sabores do Nordeste',
+    image: prizeIngressosImage,
   },
 ]
 

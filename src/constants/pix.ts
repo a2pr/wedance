@@ -5,7 +5,7 @@ export function buildPixInstructions(price: string): string {
 }
 
 export function buildLotteryPixInstructions(price: string): string {
-  return `Para garantir seus bilhetes, faça um PIX no valor de ${price}. Use o QR Code ou o código copia e cola abaixo.`
+  return `Para garantir seus bilhetes, faça um Pix no valor de ${price}. Use o QR Code ou o código copia e cola abaixo.`
 }
 
 export async function copyPixCodeToClipboard(): Promise<void> {

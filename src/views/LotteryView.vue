@@ -1,5 +1,7 @@
 <script setup lang="ts">
 import { computed, onBeforeUnmount, onMounted, ref, watch } from 'vue'
+import { useRoute } from 'vue-router'
+import LotteryHeroSection from '@/components/LotteryHeroSection.vue'
 import LotteryPrizesSection from '@/components/LotteryPrizesSection.vue'
 import LotteryPromotionSection from '@/components/LotteryPromotionSection.vue'
 import LotteryTicketPicker from '@/components/LotteryTicketPicker.vue'
@@ -9,6 +11,7 @@ import ConfirmModal from '@/components/ConfirmModal.vue'
 import { evaluateLotteryTickets } from '@/constants/lotteryTickets'
 import { formatPriceBRL } from '@/constants/formOptions'
 import { OTHER_SELLER_ID, resolveSellerName } from '@/constants/lotterySellers'
+import { parseLotteryPrefill } from '@/constants/lotteryQueryParams'
 import {
   LOTTERY_FLOW_NAME,
   LOTTERY_IDLE_PROMPT_CANCEL,
@@ -22,11 +25,14 @@ import {
 import { ANALYTICS_EVENTS } from '@/constants/analyticsEvents'
 import { trackEvent } from '@/utils/analytics'
 
-const SECTION_VISIBILITY_THRESHOLD = 0.5
-const TICKETS_SECTION_INDEX = 2
+/* Fires when a section reaches the middle band of the viewport, at any section height. */
+const SECTION_VISIBILITY_ROOT_MARGIN = '-25% 0px -25% 0px'
 
-const paidTickets = ref(0)
-const selectedSellerId = ref('')
+const route = useRoute()
+const prefill = parseLotteryPrefill(route.query)
+
+const paidTickets = ref(prefill.paidTickets)
+const selectedSellerId = ref(prefill.sellerId)
 const customSellerName = ref('')
 
 const sectionEls = ref<HTMLElement[]>([])
@@ -57,6 +63,7 @@ const paymentContext = computed(() => {
 })
 
 const sections = computed(() => [
+  { id: LOTTERY_SECTION_IDS.HERO, visible: true },
   { id: LOTTERY_SECTION_IDS.PRIZES, visible: true },
   { id: LOTTERY_SECTION_IDS.PROMOTION, visible: true },
   { id: LOTTERY_SECTION_IDS.TICKETS, visible: true },
@@ -96,7 +103,7 @@ function startIdleTimer(): void {
 function onConfirmIdlePrompt(): void {
   trackEvent(ANALYTICS_EVENTS.CONFIRM_IDLE_PROMPT, { flow: LOTTERY_FLOW_NAME })
   showIdlePrompt.value = false
-  scrollToSection(TICKETS_SECTION_INDEX)
+  scrollToSection(sections.value.findIndex((section) => section.id === LOTTERY_SECTION_IDS.TICKETS))
 }
 
 function onDismissIdlePrompt(): void {
@@ -104,12 +111,8 @@ function onDismissIdlePrompt(): void {
   showIdlePrompt.value = false
 }
 
-watch(paidTickets, (value) => {
+watch(paidTickets, () => {
   startIdleTimer()
-  if (value === 0) {
-    selectedSellerId.value = ''
-    customSellerName.value = ''
-  }
 })
 
 watch(selectedSellerId, (value) => {
@@ -133,8 +136,31 @@ watch(paymentContext, (newContext, oldContext) => {
   }
 })
 
+function trackPrefill(): void {
+  if (!prefill.hasSellerPrefill && !prefill.hasTicketPrefill) return
+  trackEvent(ANALYTICS_EVENTS.LOTTERY_PREFILL_APPLIED, {
+    flow: LOTTERY_FLOW_NAME,
+    seller_id: prefill.sellerId,
+    paid_tickets: prefill.paidTickets,
+    has_seller_prefill: prefill.hasSellerPrefill,
+    has_ticket_prefill: prefill.hasTicketPrefill,
+  })
+}
+
+function trackInitialPaymentInstructions(): void {
+  if (!paymentContext.value) return
+  trackEvent(ANALYTICS_EVENTS.VIEW_PAYMENT_INSTRUCTIONS, {
+    flow: LOTTERY_FLOW_NAME,
+    total_tickets: paymentContext.value.evaluation.totalTickets,
+    price: paymentContext.value.priceDisplay,
+  })
+}
+
 onMounted(() => {
   document.title = LOTTERY_PAGE_TITLE
+
+  trackPrefill()
+  trackInitialPaymentInstructions()
 
   observer = new IntersectionObserver(
     (entries) => {
@@ -148,7 +174,7 @@ onMounted(() => {
         }
       }
     },
-    { threshold: SECTION_VISIBILITY_THRESHOLD },
+    { rootMargin: SECTION_VISIBILITY_ROOT_MARGIN, threshold: 0 },
   )
 
   for (const el of sectionEls.value) {
@@ -167,18 +193,22 @@ onBeforeUnmount(() => {
 <template>
   <main class="lottery-view">
     <div :ref="(el) => setSectionRef(el as Element | null, 0)">
-      <LotteryPrizesSection />
+      <LotteryHeroSection />
     </div>
 
     <div :ref="(el) => setSectionRef(el as Element | null, 1)">
-      <LotteryPromotionSection />
+      <LotteryPrizesSection />
     </div>
 
     <div :ref="(el) => setSectionRef(el as Element | null, 2)">
+      <LotteryPromotionSection />
+    </div>
+
+    <div :ref="(el) => setSectionRef(el as Element | null, 3)">
       <LotteryTicketPicker v-model="paidTickets" />
     </div>
 
-    <div v-if="hasTickets" :ref="(el) => setSectionRef(el as Element | null, 3)">
+    <div v-if="hasTickets" :ref="(el) => setSectionRef(el as Element | null, 4)">
       <LotterySellerPicker
         :seller-id="selectedSellerId"
         :custom-name="customSellerName"
@@ -187,7 +217,7 @@ onBeforeUnmount(() => {
       />
     </div>
 
-    <div v-if="paymentContext" :ref="(el) => setSectionRef(el as Element | null, 4)">
+    <div v-if="paymentContext" :ref="(el) => setSectionRef(el as Element | null, 5)">
       <LotteryPaymentSection
         :evaluation="paymentContext.evaluation"
         :price-display="paymentContext.priceDisplay"

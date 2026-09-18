@@ -75,7 +75,7 @@ function sendPaymentConfirmation(): void {
       <img
         class="img-fluid rounded mb-3 lottery-payment__image"
         :src="pixQrImage"
-        alt="QR Code do PIX para pagamento da rifa"
+        alt="QR Code do Pix para pagamento da rifa"
       />
 
       <div class="alert alert-warning mx-auto text-start lottery-payment__alert" role="alert">

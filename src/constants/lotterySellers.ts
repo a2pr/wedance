@@ -27,3 +27,21 @@ export function resolveSellerName(sellerId: string, customName: string): string 
   if (sellerId === OTHER_SELLER_ID) return customName.trim()
   return LOTTERY_SELLERS.find((seller) => seller.id === sellerId)?.name ?? ''
 }
+
+function normalizeSellerName(value: string): string {
+  return value
+    .trim()
+    .toLowerCase()
+    .normalize('NFD')
+    .replace(/\p{Diacritic}/gu, '')
+}
+
+export function findSellerByName(value: string): LotterySeller | undefined {
+  const normalized = normalizeSellerName(value)
+  if (!normalized) return undefined
+  return LOTTERY_SELLERS.find(
+    (seller) =>
+      normalizeSellerName(seller.id) === normalized ||
+      normalizeSellerName(seller.name) === normalized,
+  )
+}

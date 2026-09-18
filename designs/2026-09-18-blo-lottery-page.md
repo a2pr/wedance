@@ -167,3 +167,210 @@ built from existing tokens.
 - No *regulamento* copy (how the draw is conducted, how a winner is contacted).
 - Per-route SEO: `index.html` meta is global and reads "próximos eventos em breve", so a shared
   `/blo` link previews with that text. Needs a router `afterEach` if wanted.
+
+---
+
+## Refinement pass: tiara image + prefill links
+
+Follow-up on top of commit `42d2255`.
+
+### Tiara image
+
+`src/assets/images/prize-tiara.jpeg` (958×958) added and wired to the `tiara` entry in
+`lotteryPrizes.ts`. The card switches from the 🎁 fallback automatically — the existing
+`aspect-ratio: 3 / 4` + `object-fit: cover` + `object-position: top center` keeps the headband
+in frame on a square source. Verified at 375 and 1280.
+
+Two further photos arrived in the same drop (`WhatsApp Image 2026-09-18 at 10.57.32.jpeg` and
+`… (1).jpeg`, both bags) and are deliberately left unused pending confirmation of which prize
+they belong to.
+
+### Query-parameter prefill
+
+Sellers share this link by hand over WhatsApp. `?seller=` and `?ticket=` let them share a link
+that opens with their name selected and a quantity already counted, landing the buyer on the
+PIX screen.
+
+`src/constants/lotteryQueryParams.ts` owns the URL contract and all parsing;
+`LotteryView.vue` only initializes its existing refs from it.
+
+**`seller` — case-insensitive.** `findSellerByName()` in `lotterySellers.ts` lowercases both
+the incoming value and each candidate (plus trim and accent-stripping) before comparing, against
+both `id` and `name`. `Samara`, `samara`, `SAMARA`, `SaMaRa` and `  samara  ` all resolve to
+`{ id: 'samara' }`. What is stored is always the canonical lowercase slug, never the raw query
+string, so the dropdown binds correctly and `seller_id` reports consistently.
+
+An unmatched name is ignored and nothing is selected. That is deliberate: the seller name flows
+into the WhatsApp message, which is the only record of who made the sale, so an allowlist stops
+a crafted link writing arbitrary text into it. `outro` is rejected for the same reason — it is
+the free-text branch.
+
+**`ticket`** — digits only (`/^\d+$/`) on the trimmed value, then the existing
+`clampTicketQuantity()`. `5` → 5, `250` → 100; `5.9`, `-3`, `abc` and empty → no prefill. Strict
+digit matching matters because `Number('5.9')` would otherwise silently truncate.
+
+### Prefill does not fire `select_seller`
+
+Prefills are applied as *initial* ref values, so the existing watchers do not fire. That is
+correct — a prefill is not a user selection, and counting it as one would corrupt the funnel.
+
+This left one real gap, now fixed: `view_payment_instructions` fires from
+`watch(paymentContext, …)` with no `immediate: true`, so on a fully-prefilled link (where
+`paymentContext` is non-null at setup) it would never have fired, and the funnel would show
+conversions with no payment-screen step. `LotteryView.vue` now fires it once on mount when the
+context is already populated.
+
+### New event
+
+| Step | Event | Params |
+|---|---|---|
+| Link opened with a prefill | `lottery_prefill_applied` | `flow`, `seller_id`, `paid_tickets`, `has_seller_prefill`, `has_ticket_prefill` |
+
+Fires once on mount, only when at least one prefill applied; never on a bare `/blo`.
+`seller_id` is the same slug used by `select_seller` and `payment_confirmed`, so all three group
+on one dimension.
+
+`payment_confirmed` already gave per-seller **sales**; this gives the other half of the ratio —
+how many people **opened** each seller's link, including those who never bought — turning a
+sales count into a per-seller conversion rate. Register `seller_id` as a custom dimension in the
+GA4 property to group by it in standard reports.
+
+### Verified
+
+| URL | Result |
+|---|---|
+| `?seller=Samara&ticket=5` | qty 5, "6 bilhetes", R$ 50,00, Samara selected, payment visible |
+| `?seller=SAMARA` / `SaMaRa` / `%20samara%20` | all resolve to Samara |
+| `?seller=Samara` alone | seller held in state; applied once a quantity is picked |
+| `?seller=Mariana` / `xyz` / `outro` | nothing selected; ticket prefill still honoured |
+| `?ticket=250` | clamped to 100 (R$ 1.000,00) |
+| `?ticket=5.9` / `-3` / `abc` / empty | no prefill |
+| `/blo` | unchanged |
+
+Prefilled dropdown stays editable and `select_seller` fires on the user's change only. The idle
+prompt is suppressed on prefilled links and still fires on cold ones. Type-check and lint clean.
+
+### Two bugs found while verifying prefilled renders
+
+**Seller silently lost on a counter round-trip.** `watch(paidTickets, …)` cleared
+`selectedSellerId` whenever the quantity hit 0. Dropping the counter to 0 and raising it again
+therefore wiped a prefilled seller with no visible sign: the buyer was never blocked, but the
+seller lost credit for the sale and the WhatsApp message lost its `vendedor:` value.
+
+The reset is removed. The seller section still hides at 0 because it is gated on `hasTickets`,
+and `paymentContext` requires tickets too, so holding the value while hidden leaks nothing.
+`watch(selectedSellerId, …)` still clears `customSellerName` when the seller changes away from
+`outro`. Verified 5 → 0 → 3 keeps Samara and still reaches the message, and that the
+`outro` + custom-name path survives the same round-trip.
+
+**`view_section` never fired for `lottery_prizes`** (pre-existing, from the original build).
+The observer used `threshold: 0.5`, but the prizes section is ~2037px tall against a 900px
+viewport — 50% of it can never be on screen at once, so the threshold was unreachable and the
+top of the funnel was missing from GA4 entirely.
+
+Replaced with `rootMargin: '-25% 0px -25% 0px'` and `threshold: 0`, which fires when a section
+enters the middle band of the viewport regardless of its height. All five sections now report,
+`lottery_prizes` fires on load, and the `Set` dedup still holds (scrolling up and down
+repeatedly yields one event per section).
+
+`DayView.vue` uses the same 0.5-threshold pattern and may under-report; left alone, since `/day`
+is currently unrouted.
+
+### Landing position — deliberately unchanged
+
+A prefilled link lands at the top of the page; the payment section sits ~3,150px below on
+desktop. Auto-scrolling was considered and rejected: the prize gallery is what motivates the
+purchase, so a seller-shared link should still show it before asking for money.
+
+---
+
+## Refinement pass: event flyer hero + four prize images
+
+### New hero section
+
+`blo.jpeg` (the "Rumo ao BLO 26" event flyer) becomes the **first** section, above the prize
+gallery, in a new `LotteryHeroSection.vue`. Capped at `min(100%, 560px)` and centred; verified
+at 375px with no horizontal overflow.
+
+Adding a section shifted every index in `LotteryView.vue`. `TICKETS_SECTION_INDEX = 2` was a
+hardcoded constant that would now point at the promotion section, silently breaking the idle
+prompt's scroll target. It is replaced with a lookup by id:
+
+```ts
+scrollToSection(sections.value.findIndex((s) => s.id === LOTTERY_SECTION_IDS.TICKETS))
+```
+
+so the target survives any future reordering. `LOTTERY_SECTION_IDS.HERO` added, and
+`view_section` now reports `lottery_hero` on load.
+
+Note on the idle scroll: with the quantity at 0 the counter is the last section on the page, so
+`scrollIntoView({ block: 'start' })` cannot bring it to the very top — the document ends first.
+Verified `scrollY === maxScroll` and the stepper fully in view. Working as intended, not a bug.
+
+### Prize images
+
+| Prize | Image |
+|---|---|
+| Aula particular prof. Chrys | `chrys.jpeg` |
+| Par de ingressos Encontro Sertanejo | `ingressos.jpeg` (generic ticket) |
+| Par de ingressos milonga Sentimental | `milonga.jpeg` (event flyer) |
+| Par de ingressos Sabores do Nordeste | `ingressos.jpeg` (generic ticket) |
+
+7 of 13 prizes now carry artwork. Filenames were kept as delivered rather than renamed to the
+`prize-*` convention, since they are already lowercase and space-free.
+
+### Cross-check against the flyer
+
+The flyer is the source of truth for the offer, and reading it surfaced discrepancies with
+`LOTTERY_PRIZES` that need a human decision:
+
+- **Chapinha and Babyliss are two separate prizes on the flyer** (`1- Chapinha`, `1- Babyliss`);
+  the site lists a single combined "Chapinha Babyliss". The site therefore advertises one fewer
+  prize than the flyer.
+- **Camisetas Personalizadas is quantity 2** on the flyer; the site card shows no quantity.
+- **PIX key on the flyer is `alexanderwitheney@gmail.com`.** The site pays via
+  `VITE_PIX_COPY_PASTE_CODE` and the static `pix-qr.png`. These must resolve to the same account
+  — a mismatch sends money to the wrong place. Env files are not touched by this project, so
+  this needs a human check.
+- **Phone on the flyer is `41 99504-1791`**, which must match `VITE_WHATSAPP_PHONE_NUMBER` or
+  confirmations land in a different inbox than the flyer advertises.
+- The prize card reads "Aula particular com **a** prof. Chrys"; the flyer uses no article.
+  Worth confirming which is correct before it ships next to a real person's name.
+
+Confirmed matching: draw date 10/10, ticket price 10 reais, and "A cada 5 números +1 de brinde"
+(the 5+1 promotion).
+
+### Open item
+
+`ingressos.jpeg` is branded **"Estação Natureza"** — a specific venue name, visible on the card.
+It reads oddly as the image for Encontro Sertanejo and Sabores do Nordeste tickets. Either a
+truly unbranded ticket graphic or painting out that text would make it generic as intended.
+
+---
+
+## Language and grammar review
+
+A full pass over every user-visible string on `/blo`. Five corrections applied:
+
+| Before | After | Why |
+|---|---|---|
+| `Par de ingressos para o Sabores do Nordeste` | `…para o evento Sabores do Nordeste` | Singular article against a plural noun. Adding "evento" makes the article agree and keeps the event name intact. |
+| `Par de ingressos para a milonga Sentimental` | `…para a Milonga Sentimental` | "Milonga Sentimental" is the event's proper name, as the flyer shows it. |
+| `Sem o comprovante sua participação…` | `Sem o comprovante, sua participação…` | Comma after the fronted adverbial phrase. |
+| `Segue o comprovante do PIX em anexo.` | `Vou enviar o comprovante do Pix agora.` | The old line claimed the receipt was attached, but it is written *before* the buyer attaches anything — `wa.me` cannot carry a file. The new line is accurate and still prompts the action. |
+| `PIX` in display copy | `Pix` | Banco Central styles the brand "Pix". The page mixed `PIX` in prose with `Pix` on the copy button. Now consistent; `PIX_` code identifiers are untouched. |
+
+Verified correct and left alone: accents throughout, singular/plural agreement driven by
+`pluralizeTickets()` (1 bilhete / 2 bilhetes, and the bonus celebration in both forms), the
+nudge copy, currency via `formatPriceBRL`, all `alt` text, `aria-label`s, `<select>` options and
+the input placeholder. No stray English in any display string.
+
+`/day`'s `buildPixInstructions()` still mixes `PIX` and `pix` and `WHATSAPP_MESSAGE_PREFIX`
+still reads `Ja paguei minha inscripçao` (missing accent, Spanish-influenced spelling). Both
+left as-is — out of scope for this page, and noted here rather than fixed as a drive-by.
+
+### Still open for a human
+
+- "Aula particular com **a** prof. Chrys" — the article was never confirmed.
+- "Chapinha Babyliss" is one prize on the site but two on the flyer.
+- "Camisetas personalizadas" does not show the flyer's quantity of 2.

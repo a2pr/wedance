@@ -1,4 +1,5 @@
 export const LOTTERY_SECTION_IDS = {
+  HERO: 'lottery_hero',
   PRIZES: 'lottery_prizes',
   PROMOTION: 'lottery_promotion',
   TICKETS: 'lottery_tickets',
@@ -7,6 +8,7 @@ export const LOTTERY_SECTION_IDS = {
 } as const
 
 export const LOTTERY_PAGE_TITLE = 'Rifa Wedance'
+export const LOTTERY_FLYER_ALT = 'Rumo ao BLO 26 — Ação entre Amigos: lista de prêmios da rifa'
 export const LOTTERY_PRIZES_HEADING = 'Prêmios'
 export const LOTTERY_PROMOTION_HEADING = 'Como funciona'
 export const LOTTERY_TICKETS_HEADING = 'Quantos bilhetes você quer?'
