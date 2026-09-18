@@ -8,6 +8,7 @@ import LotteryTicketPicker from '@/components/LotteryTicketPicker.vue'
 import LotterySellerPicker from '@/components/LotterySellerPicker.vue'
 import LotteryPaymentSection from '@/components/LotteryPaymentSection.vue'
 import ConfirmModal from '@/components/ConfirmModal.vue'
+import SectionScrollIndicator from '@/components/SectionScrollIndicator.vue'
 import { evaluateLotteryTickets } from '@/constants/lotteryTickets'
 import { formatPriceBRL } from '@/constants/formOptions'
 import { OTHER_SELLER_ID, resolveSellerName } from '@/constants/lotterySellers'
@@ -21,6 +22,8 @@ import {
   LOTTERY_IDLE_PROMPT_TITLE,
   LOTTERY_PAGE_TITLE,
   LOTTERY_SECTION_IDS,
+  LOTTERY_NAV_GROUPS,
+  LOTTERY_SECTION_NAV_LABEL,
 } from '@/constants/lotteryUi'
 import { ANALYTICS_EVENTS } from '@/constants/analyticsEvents'
 import { trackEvent } from '@/utils/analytics'
@@ -37,12 +40,14 @@ const customSellerName = ref('')
 
 const sectionEls = ref<HTMLElement[]>([])
 const showIdlePrompt = ref(false)
+const activeSectionIndex = ref(0)
 
 let observer: IntersectionObserver | null = null
 let idleTimeout: ReturnType<typeof setTimeout> | undefined
 let hasShownIdlePrompt = false
 
 const viewedSectionIds = new Set<string>()
+let activeSectionFrame = 0
 
 const evaluation = computed(() => evaluateLotteryTickets(paidTickets.value))
 const priceDisplay = computed(() => formatPriceBRL(evaluation.value.totalPriceValue))
@@ -70,6 +75,38 @@ const sections = computed(() => [
   { id: LOTTERY_SECTION_IDS.SELLER, visible: hasTickets.value },
   { id: LOTTERY_SECTION_IDS.PAYMENT, visible: paymentContext.value !== null },
 ])
+
+const navGroups = LOTTERY_NAV_GROUPS.map((group) => ({ id: group.id, label: group.label }))
+
+const activeNavIndex = computed(() => {
+  const activeSectionId = sections.value[activeSectionIndex.value]?.id
+  if (!activeSectionId) return 0
+  const groupIndex = LOTTERY_NAV_GROUPS.findIndex((group) =>
+    (group.sectionIds as readonly string[]).includes(activeSectionId),
+  )
+  return groupIndex === -1 ? 0 : groupIndex
+})
+
+function scrollToNavGroup(groupIndex: number): void {
+  const targetSectionId = LOTTERY_NAV_GROUPS[groupIndex]?.sectionIds[0]
+  if (!targetSectionId) return
+  scrollToSection(sections.value.findIndex((section) => section.id === targetSectionId))
+}
+
+function updateActiveSection(): void {
+  const viewportCenter = window.innerHeight / 2
+  const index = sectionEls.value.findIndex((el) => {
+    if (!el) return false
+    const rect = el.getBoundingClientRect()
+    return rect.top <= viewportCenter && rect.bottom >= viewportCenter
+  })
+  if (index !== -1) activeSectionIndex.value = index
+}
+
+function onScrollOrResize(): void {
+  cancelAnimationFrame(activeSectionFrame)
+  activeSectionFrame = requestAnimationFrame(updateActiveSection)
+}
 
 function setSectionRef(el: Element | null, index: number): void {
   if (el instanceof HTMLElement) {
@@ -181,10 +218,17 @@ onMounted(() => {
     observer.observe(el)
   }
 
+  updateActiveSection()
+  window.addEventListener('scroll', onScrollOrResize, { passive: true })
+  window.addEventListener('resize', onScrollOrResize)
+
   startIdleTimer()
 })
 
 onBeforeUnmount(() => {
+  cancelAnimationFrame(activeSectionFrame)
+  window.removeEventListener('scroll', onScrollOrResize)
+  window.removeEventListener('resize', onScrollOrResize)
   observer?.disconnect()
   clearIdleTimer()
 })
@@ -239,6 +283,13 @@ onBeforeUnmount(() => {
         </a>
       </p>
     </footer>
+
+    <SectionScrollIndicator
+      :sections="navGroups"
+      :active-index="activeNavIndex"
+      :nav-label="LOTTERY_SECTION_NAV_LABEL"
+      @navigate="scrollToNavGroup"
+    />
 
     <ConfirmModal
       :show="showIdlePrompt"

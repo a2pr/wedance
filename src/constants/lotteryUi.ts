@@ -7,6 +7,31 @@ export const LOTTERY_SECTION_IDS = {
   PAYMENT: 'lottery_payment',
 } as const
 
+/* Agrupa as seções observadas nos pontos de navegação; a compra é um passo só. */
+export const LOTTERY_NAV_GROUPS = [
+  { id: 'inicio', label: 'Início', sectionIds: [LOTTERY_SECTION_IDS.HERO] },
+  { id: 'premios', label: 'Prêmios', sectionIds: [LOTTERY_SECTION_IDS.PRIZES] },
+  { id: 'como-funciona', label: 'Como funciona', sectionIds: [LOTTERY_SECTION_IDS.PROMOTION] },
+  {
+    id: 'compra',
+    label: 'Bilhetes e pagamento',
+    sectionIds: [
+      LOTTERY_SECTION_IDS.TICKETS,
+      LOTTERY_SECTION_IDS.SELLER,
+      LOTTERY_SECTION_IDS.PAYMENT,
+    ],
+  },
+] as const
+
+export const LOTTERY_SECTION_NAV_LABEL = 'Seções da página'
+
+/* Prêmios visíveis por vez no carrossel, por breakpoint. */
+export const LOTTERY_PRIZES_PER_VIEW_DESKTOP = 4
+export const LOTTERY_PRIZES_PREV_LABEL = 'Ver prêmios anteriores'
+export const LOTTERY_PRIZES_NEXT_LABEL = 'Ver próximos prêmios'
+export const LOTTERY_PRIZES_PAGE_NAV_LABEL = 'Páginas de prêmios'
+export const LOTTERY_PRIZES_PAGE_LABEL = 'Página'
+
 export const LOTTERY_PAGE_TITLE = 'Rifa Wedance'
 export const LOTTERY_FLYER_ALT = 'Rumo ao BLO 26 — Ação entre Amigos: lista de prêmios da rifa'
 export const LOTTERY_PRIZES_HEADING = 'Prêmios'

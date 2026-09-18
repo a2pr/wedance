@@ -4,12 +4,14 @@ import prizeTiaraImage from '@/assets/images/prize-tiara.jpeg'
 import prizeAulaChrysImage from '@/assets/images/chrys.jpeg'
 import prizeMilongaImage from '@/assets/images/milonga.jpeg'
 import prizeIngressosImage from '@/assets/images/ingressos.jpeg'
+import bailarinaVideo from '@/assets/clip/bailarina.mp4'
 
 export interface LotteryPrize {
   id: string
   name: string
   description?: string
   image?: string
+  video?: string
   instagramUrl?: string
   instagramName?: string
 }
@@ -20,6 +22,8 @@ export const LOTTERY_PRIZES: LotteryPrize[] = [
     name: 'Aula particular com a prof. Chrys',
     description: 'Uma aula particular exclusiva',
     image: prizeAulaChrysImage,
+    instagramUrl: 'https://www.instagram.com/chrysantos_/',
+    instagramName: 'Chrys',
   },
   {
     id: 'aula-particular-witheney',
@@ -41,6 +45,7 @@ export const LOTTERY_PRIZES: LotteryPrize[] = [
     id: 'bailarina',
     name: 'bailarina',
     description: 'Uma bailarina',
+    video: bailarinaVideo,
   },
   {
     id: 'camisetas-personalizadas',

@@ -374,3 +374,57 @@ left as-is — out of scope for this page, and noted here rather than fixed as a
 - "Aula particular com **a** prof. Chrys" — the article was never confirmed.
 - "Chapinha Babyliss" is one prize on the site but two on the flyer.
 - "Camisetas personalizadas" does not show the flyer's quantity of 2.
+
+---
+
+## Refinement pass: prize carousel + section navigation dots
+
+### Prize carousel
+
+`LotteryPrizesSection.vue` changes from a wrapping grid to a horizontal carousel showing
+**4 prizes at a time** on desktop. Bootstrap's JS is deliberately not loaded in this project, so
+the carousel is hand-rolled from CSS scroll-snap — no new dependency:
+
+- track is `display: flex; overflow-x: auto; scroll-snap-type: x mandatory`, scrollbar hidden
+- each slide is `flex: 0 0 calc((100% - (n - 1) * gap) / n)` with `n` set per breakpoint
+- `n` = 4 at ≥992px, 3 at ≥768px, 2 below — 4 at once is unreadable at 375px
+- prev/next buttons scroll by exactly one page (`el.clientWidth`) and disable at each end,
+  driven by a `scroll` handler with a 4px tolerance
+
+**Arrows are hidden below 1200px.** They sit at the container's edge and the navigation dots are
+fixed 20px from the viewport's right edge; measured at 375/768/992 the two overlap, and only at
+xl does the container margin create clearance. Below xl the carousel is swiped or scrolled,
+which is the native gesture on those devices anyway.
+
+### Section navigation dots
+
+The `/day` scroll indicator is extracted into `SectionScrollIndicator.vue` — same markup,
+same 12px bordered dots, same fixed right-centre placement. `DayView.vue` is left untouched.
+
+Per the brief the dots show **four** navigational steps, not the six observed sections — the
+purchase flow is one step:
+
+| Dot | Covers |
+|---|---|
+| Início | `lottery_hero` |
+| Prêmios | `lottery_prizes` |
+| Como funciona | `lottery_promotion` |
+| Bilhetes e pagamento | `lottery_tickets`, `lottery_seller`, `lottery_payment` |
+
+`LOTTERY_NAV_GROUPS` in `lotteryUi.ts` owns that mapping. The dot count stays at 4 whether or
+not the seller and payment sections have been revealed, and clicking the fourth dot scrolls to
+the counter.
+
+**The active dot follows the viewport centre**, not the IntersectionObserver. Two earlier
+attempts were wrong and are worth recording:
+
+1. Setting the active index per observer entry meant the last entry processed won, so at the top
+   of the page "Prêmios" lit up instead of "Início".
+2. Taking the topmost intersecting section fixed that but broke "Como funciona": at 456px it is
+   shorter than the observer's 450px band, so a neighbour always co-intersects and the section
+   above always won. That dot could never activate.
+
+The dot now tracks whichever section contains the vertical centre of the viewport, recomputed on
+`scroll`/`resize` behind `requestAnimationFrame` and cleaned up on unmount. The observer keeps
+its single job — deduped `view_section` analytics. Verified each of the four dots activates at
+the right scroll offsets and that every dot navigates to its section.

@@ -1,5 +1,5 @@
 export const LOTTERY_DRAW_DATE = '10/10/2026'
-export const LOTTERY_INSTAGRAM_HANDLE = '@wedance.company'
+export const LOTTERY_INSTAGRAM_HANDLE = 'wedance.company'
 export const LOTTERY_INSTAGRAM_URL = 'https://www.instagram.com/wedance.company/'
 
 export const LOTTERY_DRAW_LABEL = 'Sorteio'
