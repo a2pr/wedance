@@ -4,6 +4,10 @@ export function buildPixInstructions(price: string): string {
   return `Para fazer a inscrição, você só precisa fazer um PIX no valor de ${price} para o nosso Diretor. Aqui está o QR Code e o código copia e cola para fazer o pix.`
 }
 
+export function buildLotteryPixInstructions(price: string): string {
+  return `Para garantir seus bilhetes, faça um PIX no valor de ${price}. Use o QR Code ou o código copia e cola abaixo.`
+}
+
 export async function copyPixCodeToClipboard(): Promise<void> {
   if (navigator.clipboard?.writeText) {
     await navigator.clipboard.writeText(PIX_COPY_PASTE_CODE)

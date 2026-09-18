@@ -8,4 +8,12 @@ export const ANALYTICS_EVENTS = {
   VIEW_PAYMENT_INSTRUCTIONS: 'view_payment_instructions',
   COPY_PIX_CODE: 'copy_pix_code',
   PAYMENT_CONFIRMED: 'payment_confirmed',
+  SELECT_TICKET_QUANTITY: 'select_ticket_quantity',
+  VIEW_BONUS_NUDGE: 'view_bonus_nudge',
+  ACCEPT_BONUS_NUDGE: 'accept_bonus_nudge',
+  EARN_BONUS_TICKET: 'earn_bonus_ticket',
+  SELECT_SELLER: 'select_seller',
+  VIEW_IDLE_PROMPT: 'view_idle_prompt',
+  CONFIRM_IDLE_PROMPT: 'confirm_idle_prompt',
+  DISMISS_IDLE_PROMPT: 'dismiss_idle_prompt',
 } as const

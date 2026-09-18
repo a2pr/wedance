@@ -9,6 +9,11 @@ const router = createRouter({
       component: () => import('../views/HomeView.vue'),
     },
     {
+      path: '/blo',
+      name: 'lottery',
+      component: () => import('../views/LotteryView.vue'),
+    },
+    {
       path: '/:pathMatch(.*)*',
       redirect: '/',
     },
