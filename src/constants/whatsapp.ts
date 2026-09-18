@@ -8,3 +8,9 @@ export function buildPaymentMessage(suffix: string): string {
 export function buildWhatsAppLink(phoneNumber: string, message: string): string {
   return `https://wa.me/${phoneNumber}?text=${encodeURIComponent(message)}`
 }
+
+export const WHATSAPP_LOTTERY_MESSAGE_PREFIX = 'Já paguei minha rifa'
+
+export function buildLotteryPaymentMessage(suffix: string, comprovanteLine: string): string {
+  return `${WHATSAPP_LOTTERY_MESSAGE_PREFIX} — ${suffix}!\n${comprovanteLine}`
+}

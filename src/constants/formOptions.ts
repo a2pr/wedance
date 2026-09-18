@@ -52,5 +52,6 @@ export const FORM_OPTIONS: FormOption[] = [
 ]
 
 export function formatPriceBRL(value: number): string {
-  return `R$ ${value.toFixed(2).replace('.', ',')}`
+  const [whole = '0', cents = '00'] = value.toFixed(2).split('.')
+  return `R$ ${whole.replace(/\B(?=(\d{3})+(?!\d))/g, '.')},${cents}`
 }

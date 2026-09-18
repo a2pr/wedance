@@ -25,6 +25,9 @@ Team standard is to avoid explanatory comments — a single line noting the cons
 ## Vue
 We are running a vue application
 
+## Browser interaction
+Use playwright-cli instead of claude-chrome plugin
+
 ## DO NOT TOUCH FILES
 - any env file
 - if need it just comment in terminal
