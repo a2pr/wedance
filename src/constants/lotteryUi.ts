@@ -34,6 +34,8 @@ export const LOTTERY_PRIZES_PAGE_LABEL = 'Página'
 
 export const LOTTERY_PAGE_TITLE = 'Rifa Wedance'
 export const LOTTERY_FLYER_ALT = 'Rumo ao BLO 26 — Ação entre Amigos: lista de prêmios da rifa'
+export const LOTTERY_FLYER_ZOOM_HINT = 'Toque para ampliar'
+export const LOTTERY_FLYER_CLOSE_LABEL = 'Fechar imagem ampliada'
 export const LOTTERY_PRIZES_HEADING = 'Prêmios'
 export const LOTTERY_PROMOTION_HEADING = 'Como funciona'
 export const LOTTERY_TICKETS_HEADING = 'Quantos bilhetes você quer?'
