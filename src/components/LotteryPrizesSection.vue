@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { onBeforeUnmount, onMounted, ref } from 'vue'
+import { computed, onBeforeUnmount, onMounted, ref } from 'vue'
 import { LOTTERY_PRIZES, LOTTERY_PRIZES_MORE_COMING } from '@/constants/lotteryPrizes'
 import {
   LOTTERY_PRIZES_HEADING,
@@ -9,8 +9,13 @@ import {
   LOTTERY_PRIZES_PREV_LABEL,
 } from '@/constants/lotteryUi'
 import InstagramIcon from '@/components/icons/InstagramIcon.vue'
+import NewPrizeMedalIcon from '@/components/icons/NewPrizeMedalIcon.vue'
 
 const SCROLL_TOLERANCE_PX = 4
+
+const sortedPrizes = computed(() =>
+  [...LOTTERY_PRIZES].sort((a, b) => Number(b.newPrize ?? false) - Number(a.newPrize ?? false)),
+)
 
 const trackEl = ref<HTMLElement | null>(null)
 const canScrollPrev = ref(false)
@@ -64,8 +69,16 @@ onBeforeUnmount(() => window.removeEventListener('resize', updateScrollState))
         </button>
 
         <div ref="trackEl" class="lottery-prizes__track" @scroll="updateScrollState">
-          <div v-for="prize in LOTTERY_PRIZES" :key="prize.id" class="lottery-prizes__slide">
+          <div v-for="prize in sortedPrizes" :key="prize.id" class="lottery-prizes__slide">
             <div class="card h-100 lottery-prizes__card">
+              <div
+                v-if="prize.newPrize"
+                class="lottery-prizes__badge"
+                role="img"
+                aria-label="Novo prêmio"
+              >
+                <NewPrizeMedalIcon />
+              </div>
               <div v-if="prize.image" class="lottery-prizes__media">
                 <img
                   class="lottery-prizes__image"
@@ -120,7 +133,12 @@ onBeforeUnmount(() => window.removeEventListener('resize', updateScrollState))
         </button>
       </div>
 
-      <div v-if="pageCount > 1" class="lottery-prizes__dots" role="tablist" :aria-label="LOTTERY_PRIZES_PAGE_NAV_LABEL">
+      <div
+        v-if="pageCount > 1"
+        class="lottery-prizes__dots"
+        role="tablist"
+        :aria-label="LOTTERY_PRIZES_PAGE_NAV_LABEL"
+      >
         <button
           v-for="page in pageCount"
           :key="page"
@@ -213,7 +231,15 @@ onBeforeUnmount(() => window.removeEventListener('resize', updateScrollState))
 }
 
 .lottery-prizes__card {
+  position: relative;
   overflow: hidden;
+}
+
+.lottery-prizes__badge {
+  position: absolute;
+  top: 0.5rem;
+  left: 0.5rem;
+  z-index: 2;
 }
 
 .lottery-prizes__media {

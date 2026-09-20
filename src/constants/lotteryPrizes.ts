@@ -1,9 +1,14 @@
 import prizeAulaWitheneyImage from '@/assets/images/prize-aula-witheney.jpeg'
 import prizeAulaSamaraImage from '@/assets/images/prize-aula-samara.jpeg'
+import prizeErica from '@/assets/images/prizeErica.jpeg'
 import prizeTiaraImage from '@/assets/images/prize-tiara.jpeg'
 import prizeAulaChrysImage from '@/assets/images/chrys.jpeg'
 import prizeMilongaImage from '@/assets/images/milonga.jpeg'
-import prizeIngressosImage from '@/assets/images/ingressos.jpeg'
+import prizeTicketEncontroSertanejoImage from '@/assets/images/ticket-encontro-sertanejo.svg'
+import prizeTicketSaboresDoNordesteImage from '@/assets/images/ticket-sabores-do-nordeste.svg'
+import prizeTicketBoraDancarImage from '@/assets/images/ticket-bora-dancar.svg'
+import prizeTicketDiaDeLosMuertosImage from '@/assets/images/ticket-dia-de-los-muertos.svg'
+import prizeTicketBaileMovvaImage from '@/assets/images/ticket-baile-movva.svg'
 import bailarinaVideo from '@/assets/clip/bailarina.mp4'
 
 export interface LotteryPrize {
@@ -14,13 +19,14 @@ export interface LotteryPrize {
   video?: string
   instagramUrl?: string
   instagramName?: string
+  newPrize?: boolean
 }
 
 export const LOTTERY_PRIZES: LotteryPrize[] = [
   {
     id: 'aula-particular-chrys',
     name: 'Aula particular com a prof. Chrys',
-    description: 'Uma aula particular exclusiva',
+    description: 'Uma aula particular exclusiva no ritmo que quiser',
     image: prizeAulaChrysImage,
     instagramUrl: 'https://www.instagram.com/chrysantos_/',
     instagramName: 'Chrys',
@@ -28,7 +34,7 @@ export const LOTTERY_PRIZES: LotteryPrize[] = [
   {
     id: 'aula-particular-witheney',
     name: 'Aula particular com o prof. Witheney',
-    description: 'Uma aula particular exclusiva',
+    description: 'Uma aula particular exclusiva no ritmo que quiser',
     image: prizeAulaWitheneyImage,
     instagramUrl: 'https://www.instagram.com/witheneyalexander/',
     instagramName: 'Witheney',
@@ -36,10 +42,19 @@ export const LOTTERY_PRIZES: LotteryPrize[] = [
   {
     id: 'aula-particular-samara',
     name: 'Aula particular com a prof. Samara',
-    description: 'Uma aula particular exclusiva',
+    description: 'Uma aula particular de tango exclusiva',
     image: prizeAulaSamaraImage,
     instagramUrl: 'https://www.instagram.com/samarasfair/',
     instagramName: 'Samara',
+  },
+  {
+    id: 'aula-particular-erica-aoto',
+    name: 'Aula particular com a prof. Erica Aoto',
+    description: 'Uma aula particular exclusiva no ritmo que quiser',
+    image: prizeErica,
+    instagramUrl: 'https://www.instagram.com/ericaaoto/',
+    instagramName: 'Erica Aoto',
+    newPrize: true,
   },
   {
     id: 'bailarina',
@@ -54,7 +69,7 @@ export const LOTTERY_PRIZES: LotteryPrize[] = [
   {
     id: 'ingressos-encontro-sertanejo',
     name: 'Par de ingressos para o Encontro Sertanejo',
-    image: prizeIngressosImage,
+    image: prizeTicketEncontroSertanejoImage,
   },
   {
     id: 'tiara',
@@ -86,7 +101,77 @@ export const LOTTERY_PRIZES: LotteryPrize[] = [
   {
     id: 'ingressos-sabores-do-nordeste',
     name: 'Par de ingressos para o evento Sabores do Nordeste',
-    image: prizeIngressosImage,
+    image: prizeTicketSaboresDoNordesteImage,
+  },
+  {
+    id: 'one-mes-casal-sertanejo',
+    name: '1 mês casal na turma de sertanejo',
+    description: '1 mês na turma de sertanejo no Dance com Ricardinho',
+    newPrize: true,
+  },
+  {
+    id: '170-blindagem-unhas',
+    name: 'Voucher de R$ 170,00',
+    description: 'Blindagem de unhas naturais - Andreia Meira',
+    newPrize: true,
+  },
+  {
+    id: 'relogio',
+    name: '1 Relógio feminino',
+    newPrize: true,
+  },
+  {
+    id: 'caioba',
+    name: '1 diária de apto em Caiobá',
+    newPrize: true,
+  },
+  {
+    id: 'boneco-de-pano',
+    name: '1 boneco de pano',
+    newPrize: true,
+  },
+  {
+    id: 'aula-de-dança-Cigana-Claudia',
+    name: 'Aula de dança cigana artística com a prof. Claudia Cabral',
+    newPrize: true,
+  },
+  {
+    id: 'ingressos-bora-dancar',
+    name: 'Par de ingressos para a Festa Bora Dançar',
+    image: prizeTicketBoraDancarImage,
+    newPrize: true,
+  },
+  {
+    id: 'ingressos-dia-de-los-muertos',
+    name: 'Par de ingressos para a Festa El Día de los Muertos',
+    image: prizeTicketDiaDeLosMuertosImage,
+    newPrize: true,
+  },
+  {
+    id: 'camisetas-do-viva-latino',
+    name: '2 camisetas do Viva Latino',
+    newPrize: true,
+  },
+  {
+    id: 'aula-passinhos-fafa',
+    name: 'Aula de passinhos com Fafá do Flashback',
+    newPrize: true,
+  },
+  {
+    id: 'ingressos-Movva',
+    name: 'Par de ingressos para o Baile do Movva',
+    image: prizeTicketBaileMovvaImage,
+    newPrize: true,
+  },
+  {
+    id: 'full-pass-capivara-festival',
+    name: 'Full pass Capivara Festival',
+    newPrize: true,
+  },
+  {
+    id: 'cachaças-artesanais',
+    name: '2 cachaças artesanais',
+    newPrize: true,
   },
 ]
 
