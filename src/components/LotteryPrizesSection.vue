@@ -82,6 +82,7 @@ onBeforeUnmount(() => window.removeEventListener('resize', updateScrollState))
               <div v-if="prize.image" class="lottery-prizes__media">
                 <img
                   class="lottery-prizes__image"
+                  :class="{ 'lottery-prizes__image--contain': prize.imageFit === 'contain' }"
                   :src="prize.image"
                   :alt="`Prêmio: ${prize.name}`"
                   loading="lazy"
@@ -264,6 +265,11 @@ onBeforeUnmount(() => window.removeEventListener('resize', updateScrollState))
   height: 100%;
   object-fit: cover;
   object-position: top center;
+}
+
+.lottery-prizes__image--contain {
+  object-fit: contain;
+  object-position: center;
 }
 
 .lottery-prizes__emoji {

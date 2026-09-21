@@ -9,7 +9,11 @@ import prizeTicketSaboresDoNordesteImage from '@/assets/images/ticket-sabores-do
 import prizeTicketBoraDancarImage from '@/assets/images/ticket-bora-dancar.svg'
 import prizeTicketDiaDeLosMuertosImage from '@/assets/images/ticket-dia-de-los-muertos.svg'
 import prizeTicketBaileMovvaImage from '@/assets/images/ticket-baile-movva.svg'
+import prizeTicketFullPassConecEmotionImage from '@/assets/images/ticket-full-pass-conecemotion.svg'
+import prizeTicketFullPassCapivaraImage from '@/assets/images/ticket-full-pass-capivara-festival.svg'
+import prizeAulaEnkaiImage from '@/assets/images/enkai.jpeg'
 import bailarinaVideo from '@/assets/clip/bailarina.mp4'
+import diaria from '@/assets/images/1diaria.jpeg'
 
 export interface LotteryPrize {
   id: string
@@ -19,6 +23,7 @@ export interface LotteryPrize {
   video?: string
   instagramUrl?: string
   instagramName?: string
+  imageFit?: 'cover' | 'contain'
   newPrize?: boolean
 }
 
@@ -123,11 +128,13 @@ export const LOTTERY_PRIZES: LotteryPrize[] = [
   {
     id: 'caioba',
     name: '1 diária de apto em Caiobá',
+    image: diaria,
+    imageFit: 'contain',
     newPrize: true,
   },
   {
     id: 'boneco-de-pano',
-    name: '1 boneco de pano',
+    name: '1 boneca de pano',
     newPrize: true,
   },
   {
@@ -166,11 +173,47 @@ export const LOTTERY_PRIZES: LotteryPrize[] = [
   {
     id: 'full-pass-capivara-festival',
     name: 'Full pass Capivara Festival',
+    image: prizeTicketFullPassCapivaraImage,
     newPrize: true,
   },
   {
     id: 'cachaças-artesanais',
     name: '2 cachaças artesanais',
+    newPrize: true,
+  },
+  {
+    id: 'full-pass-conecemotion-2027',
+    name: '2 full pass para o ConecEmotion 2027',
+    image: prizeTicketFullPassConecEmotionImage,
+    newPrize: true,
+  },
+  {
+    id: 'aula-particular-guille',
+    name: 'Aula particular com o prof. Guille',
+    description: 'Uma aula particular de salsa exclusiva',
+    instagramUrl: 'https://www.instagram.com/iguillecast',
+    instagramName: 'Guille',
+    newPrize: true,
+  },
+  {
+    id: 'aula-enkai',
+    name: '1 aula na Enkai',
+    image: prizeAulaEnkaiImage,
+    newPrize: true,
+  },
+  {
+    id: 'necessaire-lu-quadros',
+    name: '2 nécessaire da Lu Quadros',
+    newPrize: true,
+  },
+  {
+    id: 'tenis-taygra',
+    name: '1 tênis Taygra',
+    newPrize: true,
+  },
+  {
+    id: 'copo-termico-stanley',
+    name: '1 copo térmico Stanley Ademicon verde-água',
     newPrize: true,
   },
 ]
