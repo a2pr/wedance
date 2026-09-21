@@ -10,10 +10,12 @@ import prizeTicketBoraDancarImage from '@/assets/images/ticket-bora-dancar.svg'
 import prizeTicketDiaDeLosMuertosImage from '@/assets/images/ticket-dia-de-los-muertos.svg'
 import prizeTicketBaileMovvaImage from '@/assets/images/ticket-baile-movva.svg'
 import prizeTicketFullPassConecEmotionImage from '@/assets/images/ticket-full-pass-conecemotion.svg'
-import prizeTicketFullPassCapivaraImage from '@/assets/images/ticket-full-pass-capivara-festival.svg'
+import prizeTicketFullPassCapivaraImage
+  from '@/assets/images/ticket-full-pass-capivara-festival.svg'
 import prizeAulaEnkaiImage from '@/assets/images/enkai.jpeg'
 import bailarinaVideo from '@/assets/clip/bailarina.mp4'
 import diaria from '@/assets/images/1diaria.jpeg'
+import elBotina from '@/assets/images/elbotina.jpeg'
 
 export interface LotteryPrize {
   id: string
@@ -93,6 +95,8 @@ export const LOTTERY_PRIZES: LotteryPrize[] = [
     id: 'voucher-el-botina',
     name: 'Voucher de R$ 100,00',
     description: 'No Ateliê e Sapataria El Botina',
+    image: elBotina,
+    imageFit: 'contain',
   },
   {
     id: 'kit-surpresa',
