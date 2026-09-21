@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { onUnmounted, ref, watch } from 'vue'
-import lotteryFlyerImage from '@/assets/images/blo.jpeg'
+import lotteryFlyerImage from '@/assets/images/hero-banner.jpeg'
 import {
   LOTTERY_FLYER_ALT,
   LOTTERY_FLYER_CLOSE_LABEL,
