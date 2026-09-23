@@ -17,13 +17,17 @@ function findOption(optionId: string) {
 const AULA_AVULSA_UNIT_PRICE = findOption('aula-avulsa').priceValue
 
 function idsMatch(selectedIds: string[], targetIds: string[]): boolean {
-  return selectedIds.length === targetIds.length && targetIds.every((id) => selectedIds.includes(id))
+  return (
+    selectedIds.length === targetIds.length && targetIds.every((id) => selectedIds.includes(id))
+  )
 }
 
 function classIdsForPeriod(periodName: string): string[] {
-  return PICKABLE_SCHEDULE_PERIODS.find((period) => period.period === periodName)?.items.map(
-    (item) => item.id,
-  ) ?? []
+  return (
+    PICKABLE_SCHEDULE_PERIODS.find((period) => period.period === periodName)?.items.map(
+      (item) => item.id,
+    ) ?? []
+  )
 }
 
 export function evaluateAulaAvulsaSelection(selectedClassIds: string[]): AulaAvulsaSelectionResult {
@@ -35,12 +39,21 @@ export function evaluateAulaAvulsaSelection(selectedClassIds: string[]): AulaAvu
     return { upgradeOptionId: 'fullpass', totalPriceValue: findOption('fullpass').priceValue }
   }
   if (idsMatch(selectedClassIds, manhaIds)) {
-    return { upgradeOptionId: 'periodo-manha', totalPriceValue: findOption('periodo-manha').priceValue }
+    return {
+      upgradeOptionId: 'periodo-manha',
+      totalPriceValue: findOption('periodo-manha').priceValue,
+    }
   }
   if (idsMatch(selectedClassIds, tardeIds)) {
-    return { upgradeOptionId: 'periodo-tarde', totalPriceValue: findOption('periodo-tarde').priceValue }
+    return {
+      upgradeOptionId: 'periodo-tarde',
+      totalPriceValue: findOption('periodo-tarde').priceValue,
+    }
   }
-  return { upgradeOptionId: null, totalPriceValue: AULA_AVULSA_UNIT_PRICE * selectedClassIds.length }
+  return {
+    upgradeOptionId: null,
+    totalPriceValue: AULA_AVULSA_UNIT_PRICE * selectedClassIds.length,
+  }
 }
 
 export function buildAulaAvulsaSelectionLabel(count: number): string {
@@ -48,7 +61,10 @@ export function buildAulaAvulsaSelectionLabel(count: number): string {
 }
 
 const PICKABLE_CLASSES_BY_ID = new Map(
-  PICKABLE_SCHEDULE_PERIODS.flatMap((period) => period.items).map((item) => [item.id, item.activity]),
+  PICKABLE_SCHEDULE_PERIODS.flatMap((period) => period.items).map((item) => [
+    item.id,
+    item.activity,
+  ]),
 )
 
 export function getClassNamesByIds(classIds: string[]): string[] {

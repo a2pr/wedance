@@ -26,7 +26,7 @@ export const SCHEDULE_PERIODS: SchedulePeriod[] = [
         id: 'tecnicas-corporais',
         time: '09:30',
         activity: 'Técnicas Corporais',
-        instructor: {name: 'Erica Aoto', instagramUrl: 'https://www.instagram.com/ericaaoto/'},
+        instructor: { name: 'Erica Aoto', instagramUrl: 'https://www.instagram.com/ericaaoto/' },
       },
       {
         id: 'forro-manha',
@@ -35,7 +35,7 @@ export const SCHEDULE_PERIODS: SchedulePeriod[] = [
         instructor: {
           name: 'Pamela Ribeiro e Witheney Alexander',
           instagramUrl: 'https://www.instagram.com/pamrvribeiro/',
-          instagramUrlTwo: 'https://www.instagram.com/witheneyalexander/'
+          instagramUrlTwo: 'https://www.instagram.com/witheneyalexander/',
         },
       },
       {
@@ -47,7 +47,7 @@ export const SCHEDULE_PERIODS: SchedulePeriod[] = [
           instagramUrl: 'https://www.instagram.com/gregorio.negoseki/',
         },
       },
-      {id: 'intervalo', time: '12:30', activity: 'Intervalo', selectable: false},
+      { id: 'intervalo', time: '12:30', activity: 'Intervalo', selectable: false },
     ],
   },
   {
@@ -57,7 +57,10 @@ export const SCHEDULE_PERIODS: SchedulePeriod[] = [
         id: 'tango',
         time: '13:30',
         activity: 'Tango para todos',
-        instructor: {name: 'Samara Sfair', instagramUrl: 'https://www.instagram.com/samarasfair/'},
+        instructor: {
+          name: 'Samara Sfair',
+          instagramUrl: 'https://www.instagram.com/samarasfair/',
+        },
       },
       {
         id: 'samba',
@@ -65,7 +68,7 @@ export const SCHEDULE_PERIODS: SchedulePeriod[] = [
         activity: 'Samba (Deslocamentos)',
         instructor: {
           name: 'Daniel Berton',
-          instagramUrl: 'https://www.instagram.com/bertondaniel/'
+          instagramUrl: 'https://www.instagram.com/bertondaniel/',
         },
       },
       {
@@ -81,7 +84,10 @@ export const SCHEDULE_PERIODS: SchedulePeriod[] = [
         id: 'salsa',
         time: '16:30',
         activity: 'Roda de casino (Dile que no)',
-        instructor: {name: 'Jhon Michell', instagramUrl: 'https://www.instagram.com/michell_jmpy/'},
+        instructor: {
+          name: 'Jhon Michell',
+          instagramUrl: 'https://www.instagram.com/michell_jmpy/',
+        },
       },
     ],
   },

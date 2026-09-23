@@ -36,7 +36,9 @@ const selectedOption = computed(() =>
 
 const isAulaAvulsaMode = computed(() => selectedOptionId.value === AULA_AVULSA_OPTION_ID)
 const aulaAvulsaEvaluation = computed(() => evaluateAulaAvulsaSelection(selectedClassIds.value))
-const aulaAvulsaPriceDisplay = computed(() => formatPriceBRL(aulaAvulsaEvaluation.value.totalPriceValue))
+const aulaAvulsaPriceDisplay = computed(() =>
+  formatPriceBRL(aulaAvulsaEvaluation.value.totalPriceValue),
+)
 const aulaAvulsaLabel = computed(() => buildAulaAvulsaSelectionLabel(selectedClassIds.value.length))
 const upgradeModalMessage = computed(() =>
   pendingUpgradeOptionId.value ? AULA_AVULSA_UPGRADE_MESSAGES[pendingUpgradeOptionId.value] : '',
@@ -51,7 +53,10 @@ const pixContext = computed(() => {
     }
   }
   if (!selectedOption.value) return null
-  return { priceDisplay: selectedOption.value.price, whatsappSuffix: selectedOption.value.whatsappSuffix }
+  return {
+    priceDisplay: selectedOption.value.price,
+    whatsappSuffix: selectedOption.value.whatsappSuffix,
+  }
 })
 
 watch(selectedOptionId, (newId, oldId) => {
@@ -206,7 +211,12 @@ function sendPaymentConfirmation(): void {
 
       <p class="text-center text-muted small mt-5 mb-0">
         Site desenvolvido por
-        <a href="https://andrespayema.com/" target="_blank" rel="noopener noreferrer" class="text-muted">
+        <a
+          href="https://andrespayema.com/"
+          target="_blank"
+          rel="noopener noreferrer"
+          class="text-muted"
+        >
           Andres Payema
         </a>
       </p>

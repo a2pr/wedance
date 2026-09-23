@@ -10,7 +10,9 @@ const lastPeriod = computed(() => SCHEDULE_PERIODS.at(-1))
 </script>
 
 <template>
-  <section class="min-vh-100 d-flex flex-column justify-content-center position-relative py-5 schedule-section">
+  <section
+    class="min-vh-100 d-flex flex-column justify-content-center position-relative py-5 schedule-section"
+  >
     <img
       :src="scheduleSideLeft"
       alt=""
