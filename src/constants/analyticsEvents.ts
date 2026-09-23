@@ -17,4 +17,5 @@ export const ANALYTICS_EVENTS = {
   CONFIRM_IDLE_PROMPT: 'confirm_idle_prompt',
   DISMISS_IDLE_PROMPT: 'dismiss_idle_prompt',
   LOTTERY_PREFILL_APPLIED: 'lottery_prefill_applied',
+  VIEW_EVENTS_SCHEDULE: 'view_events_schedule',
 } as const

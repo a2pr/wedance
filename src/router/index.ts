@@ -14,6 +14,11 @@ const router = createRouter({
       component: () => import('../views/LotteryView.vue'),
     },
     {
+      path: '/programacao',
+      name: 'events-schedule',
+      component: () => import('../views/EventsScheduleView.vue'),
+    },
+    {
       path: '/:pathMatch(.*)*',
       redirect: '/',
     },

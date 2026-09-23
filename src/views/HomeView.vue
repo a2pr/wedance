@@ -1,5 +1,12 @@
 <script setup lang="ts">
+import { onMounted } from 'vue'
 import wedanceLogo from '@/assets/images/wedance-logo.png'
+
+const HOME_PAGE_TITLE = 'Wedance'
+
+onMounted(() => {
+  document.title = HOME_PAGE_TITLE
+})
 </script>
 
 <template>
@@ -8,7 +15,9 @@ import wedanceLogo from '@/assets/images/wedance-logo.png'
       class="flex-grow-1 d-flex flex-column justify-content-center align-items-center text-center px-3"
     >
       <img class="img-fluid home-view__logo" :src="wedanceLogo" alt="Wedance" />
-      <p class="fs-4 mt-4 mb-0">Próximos eventos em breve</p>
+      <router-link to="/programacao" class="btn btn-success btn-lg mt-4"
+        >Próximos eventos</router-link
+      >
     </main>
 
     <footer class="mt-auto">
