@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import { onUnmounted, ref, watch } from 'vue'
-import lotteryFlyerImage from '@/assets/images/hero-banner.jpeg'
+import lotteryFlyerImage from '@/assets/images/hero-banner.jpeg?w=800&format=webp'
+import lotteryFlyerImageFull from '@/assets/images/hero-banner.jpeg?w=1200&format=webp'
 import {
   LOTTERY_FLYER_ALT,
   LOTTERY_FLYER_CLOSE_LABEL,
@@ -34,8 +35,14 @@ onUnmounted(() => window.removeEventListener('keydown', onKeydown))
           class="img-fluid rounded lottery-hero__flyer"
           :src="lotteryFlyerImage"
           :alt="LOTTERY_FLYER_ALT"
+          width="800"
+          height="1000"
+          fetchpriority="high"
+          loading="eager"
         />
-        <span class="lottery-hero__zoom-hint" aria-hidden="true">🔍 {{ LOTTERY_FLYER_ZOOM_HINT }}</span>
+        <span class="lottery-hero__zoom-hint" aria-hidden="true"
+          >🔍 {{ LOTTERY_FLYER_ZOOM_HINT }}</span
+        >
       </button>
     </div>
 
@@ -50,7 +57,7 @@ onUnmounted(() => window.removeEventListener('keydown', onKeydown))
       >
         <img
           class="lottery-hero__lightbox-image"
-          :src="lotteryFlyerImage"
+          :src="lotteryFlyerImageFull"
           :alt="LOTTERY_FLYER_ALT"
           @click.stop
         />

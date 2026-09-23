@@ -1,21 +1,24 @@
-import prizeAulaWitheneyImage from '@/assets/images/prize-aula-witheney.jpeg'
-import prizeAulaSamaraImage from '@/assets/images/prize-aula-samara.jpeg'
-import prizeErica from '@/assets/images/prizeErica.jpeg'
-import prizeTiaraImage from '@/assets/images/prize-tiara.jpeg'
-import prizeAulaChrysImage from '@/assets/images/chrys.jpeg'
-import prizeMilongaImage from '@/assets/images/milonga.jpeg'
+import prizeAulaWitheneyImage from '@/assets/images/prize-aula-witheney.jpeg?w=460&format=webp'
+import prizeAulaSamaraImage from '@/assets/images/prize-aula-samara.jpeg?w=460&format=webp'
+import prizeErica from '@/assets/images/prizeErica.jpeg?w=460&format=webp'
+import prizeTiaraImage from '@/assets/images/prize-tiara.jpeg?w=460&format=webp'
+import prizeAulaChrysImage from '@/assets/images/chrys.jpeg?w=460&format=webp'
+import prizeMilongaImage from '@/assets/images/milonga.jpeg?w=460&format=webp'
+import prizeUnhas from '@/assets/images/unhas-prize.jpeg?w=460&format=webp'
+import prizeCachaca from '@/assets/images/cachaca-prize.jpeg?w=460&format=webp'
+import prizeRelogio from '@/assets/images/reogio-prize.jpeg?w=460&format=webp'
 import prizeTicketEncontroSertanejoImage from '@/assets/images/ticket-encontro-sertanejo.svg'
 import prizeTicketSaboresDoNordesteImage from '@/assets/images/ticket-sabores-do-nordeste.svg'
 import prizeTicketBoraDancarImage from '@/assets/images/ticket-bora-dancar.svg'
 import prizeTicketDiaDeLosMuertosImage from '@/assets/images/ticket-dia-de-los-muertos.svg'
 import prizeTicketBaileMovvaImage from '@/assets/images/ticket-baile-movva.svg'
 import prizeTicketFullPassConecEmotionImage from '@/assets/images/ticket-full-pass-conecemotion.svg'
-import prizeTicketFullPassCapivaraImage
-  from '@/assets/images/ticket-full-pass-capivara-festival.svg'
-import prizeAulaEnkaiImage from '@/assets/images/enkai.jpeg'
+import prizeTicketFullPassCapivaraImage from '@/assets/images/ticket-full-pass-capivara-festival.svg'
+import prizeAulaEnkaiImage from '@/assets/images/enkai.jpeg?w=460&format=webp'
 import bailarinaVideo from '@/assets/clip/bailarina.mp4'
-import diaria from '@/assets/images/1diaria.jpeg'
-import elBotina from '@/assets/images/elbotina.jpeg'
+import bailarinaPoster from '@/assets/images/bailarina-poster.jpg?w=460&format=webp'
+import diaria from '@/assets/images/1diaria.jpeg?w=460&format=webp'
+import elBotina from '@/assets/images/elbotina.jpeg?w=460&format=webp'
 
 export interface LotteryPrize {
   id: string
@@ -23,6 +26,7 @@ export interface LotteryPrize {
   description?: string
   image?: string
   video?: string
+  videoPoster?: string
   instagramUrl?: string
   instagramName?: string
   imageFit?: 'cover' | 'contain'
@@ -68,6 +72,7 @@ export const LOTTERY_PRIZES: LotteryPrize[] = [
     name: 'bailarina',
     description: 'Uma bailarina',
     video: bailarinaVideo,
+    videoPoster: bailarinaPoster,
   },
   {
     id: 'camisetas-personalizadas',
@@ -123,11 +128,13 @@ export const LOTTERY_PRIZES: LotteryPrize[] = [
     name: 'Voucher de R$ 170,00',
     description: 'Blindagem de unhas naturais - Andreia Meira',
     newPrize: true,
+    image: prizeUnhas,
   },
   {
     id: 'relogio',
     name: '1 Relógio feminino',
     newPrize: true,
+    image: prizeRelogio,
   },
   {
     id: 'caioba',
@@ -184,6 +191,7 @@ export const LOTTERY_PRIZES: LotteryPrize[] = [
     id: 'cachaças-artesanais',
     name: '2 cachaças artesanais',
     newPrize: true,
+    image: prizeCachaca,
   },
   {
     id: 'full-pass-conecemotion-2027',

@@ -12,6 +12,7 @@ import InstagramIcon from '@/components/icons/InstagramIcon.vue'
 import NewPrizeMedalIcon from '@/components/icons/NewPrizeMedalIcon.vue'
 
 const SCROLL_TOLERANCE_PX = 4
+const VIDEO_VISIBILITY_ROOT_MARGIN = '200px 0px'
 
 const sortedPrizes = computed(() =>
   [...LOTTERY_PRIZES].sort((a, b) => Number(b.newPrize ?? false) - Number(a.newPrize ?? false)),
@@ -22,6 +23,21 @@ const canScrollPrev = ref(false)
 const canScrollNext = ref(false)
 const pageCount = ref(1)
 const activePage = ref(0)
+
+let videoObserver: IntersectionObserver | null = null
+const videoEls = new Map<string, HTMLVideoElement>()
+
+function setVideoRef(prizeId: string, el: Element | null): void {
+  const existing = videoEls.get(prizeId)
+  if (existing) videoObserver?.unobserve(existing)
+
+  if (!(el instanceof HTMLVideoElement)) {
+    videoEls.delete(prizeId)
+    return
+  }
+  videoEls.set(prizeId, el)
+  videoObserver?.observe(el)
+}
 
 function updateScrollState(): void {
   const el = trackEl.value
@@ -47,9 +63,25 @@ function scrollToPage(page: number): void {
 onMounted(() => {
   updateScrollState()
   window.addEventListener('resize', updateScrollState)
+
+  videoObserver = new IntersectionObserver(
+    (entries) => {
+      for (const entry of entries) {
+        const video = entry.target as HTMLVideoElement
+        if (entry.isIntersecting) video.play().catch(() => {})
+        else video.pause()
+      }
+    },
+    { rootMargin: VIDEO_VISIBILITY_ROOT_MARGIN, threshold: 0 },
+  )
+  for (const el of videoEls.values()) videoObserver.observe(el)
 })
 
-onBeforeUnmount(() => window.removeEventListener('resize', updateScrollState))
+onBeforeUnmount(() => {
+  window.removeEventListener('resize', updateScrollState)
+  videoObserver?.disconnect()
+  videoObserver = null
+})
 </script>
 
 <template>
@@ -90,13 +122,14 @@ onBeforeUnmount(() => window.removeEventListener('resize', updateScrollState))
               </div>
               <div v-else-if="prize.video" class="lottery-prizes__media">
                 <video
+                  :ref="(el) => setVideoRef(prize.id, el as Element | null)"
                   class="lottery-prizes__image"
                   :src="prize.video"
-                  autoplay
+                  :poster="prize.videoPoster"
                   muted
                   loop
                   playsinline
-                  preload="metadata"
+                  preload="none"
                 ></video>
               </div>
               <div v-else class="lottery-prizes__media lottery-prizes__media--empty">
