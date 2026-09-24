@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import { onMounted } from 'vue'
+import wedanceLogo from '@/assets/images/wedance-logo.png'
 import EventScheduleCard from '@/components/EventScheduleCard.vue'
 import {
   EVENTS_SCHEDULE_BACK_LABEL,
@@ -21,6 +22,14 @@ onMounted(() => {
   <div class="events-schedule-view min-vh-100 d-flex flex-column">
     <main class="flex-grow-1 py-5 px-3">
       <div class="container">
+        <div class="text-center pt-2 pb-4">
+          <img
+            class="img-fluid events-schedule-view__logo"
+            :src="wedanceLogo"
+            alt="Wedance"
+          />
+        </div>
+
         <h1 class="text-center mb-2">{{ EVENTS_SCHEDULE_HEADING }}</h1>
         <p class="text-center text-muted mb-4">{{ EVENTS_SCHEDULE_INTRO }}</p>
 
@@ -53,3 +62,9 @@ onMounted(() => {
     </footer>
   </div>
 </template>
+
+<style scoped>
+.events-schedule-view__logo {
+  width: min(60vw, 240px);
+}
+</style>
