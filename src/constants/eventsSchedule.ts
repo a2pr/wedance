@@ -1,11 +1,12 @@
 export interface UpcomingEvent {
   id: string
   dateLabel: string
-  name: string
+  name: string,
+  eventDone?: boolean
 }
 
 export const UPCOMING_EVENTS: UpcomingEvent[] = [
-  { id: 'mostra-danca-curitiba', dateLabel: '10 de Outubro', name: 'Mostra de Dança Curitiba' },
+  { id: 'mostra-danca-curitiba', dateLabel: '10 de Outubro', name: 'Mostra de Dança Curitiba', eventDone: true },
   { id: 'memorial', dateLabel: '18 de Outubro', name: 'Memorial' },
   { id: 'mostra-colombo', dateLabel: '24 de Outubro', name: 'Mostra Colombo' },
   { id: 'mostra-competitiva-sjp', dateLabel: '25 de Outubro', name: 'Mostra Competitiva SJP' },
