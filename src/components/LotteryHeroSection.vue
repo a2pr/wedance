@@ -1,11 +1,12 @@
 <script setup lang="ts">
 import { onUnmounted, ref, watch } from 'vue'
-import lotteryFlyerImage from '@/assets/images/hero-banner.jpeg?w=800&format=webp'
-import lotteryFlyerImageFull from '@/assets/images/hero-banner.jpeg?w=1200&format=webp'
+import winnersImage from '@/assets/images/winners.jpeg'
 import {
-  LOTTERY_FLYER_ALT,
   LOTTERY_FLYER_CLOSE_LABEL,
   LOTTERY_FLYER_ZOOM_HINT,
+  LOTTERY_WINNERS_ALT,
+  LOTTERY_WINNERS_HEADING,
+  LOTTERY_WINNERS_THANKS,
 } from '@/constants/lotteryUi'
 
 const isZoomed = ref(false)
@@ -24,7 +25,9 @@ onUnmounted(() => window.removeEventListener('keydown', onKeydown))
 
 <template>
   <section class="py-4 px-3">
-    <div class="container d-flex justify-content-center">
+    <div class="container d-flex flex-column align-items-center">
+      <h1 class="text-center mb-4">{{ LOTTERY_WINNERS_HEADING }}</h1>
+
       <button
         type="button"
         class="lottery-hero__trigger"
@@ -33,10 +36,10 @@ onUnmounted(() => window.removeEventListener('keydown', onKeydown))
       >
         <img
           class="img-fluid rounded lottery-hero__flyer"
-          :src="lotteryFlyerImage"
-          :alt="LOTTERY_FLYER_ALT"
-          width="800"
-          height="1000"
+          :src="winnersImage"
+          :alt="LOTTERY_WINNERS_ALT"
+          width="1261"
+          height="691"
           fetchpriority="high"
           loading="eager"
         />
@@ -44,6 +47,8 @@ onUnmounted(() => window.removeEventListener('keydown', onKeydown))
           >🔍 {{ LOTTERY_FLYER_ZOOM_HINT }}</span
         >
       </button>
+
+      <p class="text-center fw-semibold mt-4 mb-0">{{ LOTTERY_WINNERS_THANKS }}</p>
     </div>
 
     <template v-if="isZoomed">
@@ -52,13 +57,13 @@ onUnmounted(() => window.removeEventListener('keydown', onKeydown))
         class="modal d-block lottery-hero__lightbox"
         role="dialog"
         aria-modal="true"
-        :aria-label="LOTTERY_FLYER_ALT"
+        :aria-label="LOTTERY_WINNERS_ALT"
         @click="isZoomed = false"
       >
         <img
           class="lottery-hero__lightbox-image"
-          :src="lotteryFlyerImageFull"
-          :alt="LOTTERY_FLYER_ALT"
+          :src="winnersImage"
+          :alt="LOTTERY_WINNERS_ALT"
           @click.stop
         />
         <button
@@ -81,7 +86,7 @@ onUnmounted(() => window.removeEventListener('keydown', onKeydown))
 .lottery-hero__trigger {
   position: relative;
   display: inline-block;
-  width: min(100%, 560px);
+  width: min(100%, 720px);
   padding: 0;
   border: none;
   background: none;

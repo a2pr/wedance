@@ -240,18 +240,25 @@ onBeforeUnmount(() => {
       <LotteryHeroSection />
     </div>
 
+    <!--
     <div :ref="(el) => setSectionRef(el as Element | null, 1)">
       <LotteryPrizesSection />
     </div>
+    -->
 
+    <!--
     <div :ref="(el) => setSectionRef(el as Element | null, 2)">
       <LotteryPromotionSection />
     </div>
+    -->
 
+    <!--
     <div :ref="(el) => setSectionRef(el as Element | null, 3)">
       <LotteryTicketPicker v-model="paidTickets" />
     </div>
+    -->
 
+    <!--
     <div v-if="hasTickets" :ref="(el) => setSectionRef(el as Element | null, 4)">
       <LotterySellerPicker
         :seller-id="selectedSellerId"
@@ -260,7 +267,9 @@ onBeforeUnmount(() => {
         @update:custom-name="customSellerName = $event"
       />
     </div>
+    -->
 
+    <!--
     <div v-if="paymentContext" :ref="(el) => setSectionRef(el as Element | null, 5)">
       <LotteryPaymentSection
         :evaluation="paymentContext.evaluation"
@@ -269,6 +278,7 @@ onBeforeUnmount(() => {
         :seller-name="paymentContext.sellerName"
       />
     </div>
+    -->
 
     <footer class="mt-auto">
       <p class="text-center text-muted small py-4 mb-0">
